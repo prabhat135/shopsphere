@@ -7,17 +7,17 @@
       <div class="nav-circles">
         <div class="circle">
           <img src="homePage_img/women.jpg" />
-          <span>Women</span>
+          <a [routerLink]="['/products']" [queryParams]="{gender: 'WOMEN'}">Women</a>
         </div>
       
         <div class="circle">
           <img src="homePage_img/men.jpg" />
-          <span>Men</span>
+          <a [routerLink]="['/products']" [queryParams]="{gender: 'MEN'}">Men</a>
         </div>
       
         <div class="circle">
           <img src="homePage_img/kids.jpg" />
-          <span>Kids</span>
+          <a [routerLink]="['/products']" [queryParams]="{gender: 'KIDS'}">Kids</a>
         </div>
       </div>
       

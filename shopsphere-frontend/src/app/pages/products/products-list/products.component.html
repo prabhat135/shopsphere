@@ -1,21 +1,210 @@
-<div class="style-tabs">
-    <button (click)="loadProducts('TRADITIONAL','MEN')">Traditional</button>
-    <button (click)="loadProducts('WESTERN','MEN')">Western</button>
-    <button (click)="loadProducts('SEASONAL','MEN')">Seasonal</button>
+<!-- src/app/components/products/products.component.html -->
+<app-navbar></app-navbar>
+
+<div class="products-page">
+  <!-- Header Section -->
+  <div class="page-header">
+    <h1>
+      <span *ngIf="selectedGender">{{ getGenderName(selectedGender) }}</span>
+      <span *ngIf="selectedCategory && selectedGender"> - </span>
+      <span *ngIf="selectedCategory">{{ getCategoryName(selectedCategory) }}</span>
+      <span *ngIf="!selectedGender && !selectedCategory">All Products</span>
+    </h1>
+    <p>{{ filteredProducts.length }} products found</p>
   </div>
-  
-  <div class="gender-tabs">
-    <button (click)="loadProducts(selectedStyle,'MEN')">Men</button>
-    <button (click)="loadProducts(selectedStyle,'WOMEN')">Women</button>
-    <button (click)="loadProducts(selectedStyle,'KIDS')">Kids</button>
+
+  <div class="products-container">
+    <!-- Filter Sidebar -->
+    <aside class="filter-sidebar" [class.hidden]="!showFilterPanel">
+      <div class="filter-section">
+        <h3>Filters</h3>
+        <button class="clear-filters" (click)="clearFilters()">Clear All</button>
+      </div>
+
+      <!-- Gender Filter -->
+      <div class="filter-group">
+        <h4>Gender</h4>
+        <div class="filter-options">
+          <label *ngFor="let genderOption of allGenders" class="filter-checkbox">
+            <input type="checkbox" 
+                   [checked]="filterOptions.genders.includes(genderOption.gender)"
+                   (change)="onGenderSelect(genderOption.gender)">
+            <span>{{ getGenderName(genderOption.gender) }}</span>
+            <span class="count">({{ genderOption.count }})</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Category Filter -->
+      <div class="filter-group">
+        <h4>Category</h4>
+        <div class="filter-options">
+          <label *ngFor="let categoryOption of allCategories" class="filter-checkbox">
+            <input type="checkbox" 
+                   [checked]="filterOptions.categories.includes(categoryOption.category)"
+                   (change)="onCategorySelect(categoryOption.category)">
+            <span>{{ getCategoryName(categoryOption.category) }}</span>
+            <span class="count">({{ categoryOption.count }})</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Price Filter -->
+      <div class="filter-group">
+        <h4>Price Range</h4>
+        <div class="price-range">
+          <span>₹0 - ₹{{ priceRangeValue }}</span>
+          <input type="range" 
+                 min="0" 
+                 max="10000" 
+                 step="500"
+                 [value]="priceRangeValue"
+                 (input)="onPriceChange($event)"
+                 class="price-slider">
+        </div>
+      </div>
+
+      <!-- Size Filter -->
+      <div class="filter-group">
+        <h4>Size</h4>
+        <div class="size-options">
+          <button *ngFor="let sizeOption of allSizes" 
+                  class="size-btn"
+                  [class.active]="filterOptions.sizes.includes(sizeOption.size)"
+                  (click)="onSizeSelect(sizeOption.size)">
+            {{ sizeOption.size }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Color Filter -->
+      <div class="filter-group">
+        <h4>Color</h4>
+        <div class="color-options">
+          <div *ngFor="let colorOption of allColors" 
+               class="color-option"
+               [class.active]="filterOptions.colors.includes(colorOption.color)"
+               [style.backgroundColor]="colorOption.color.toLowerCase()"
+               [title]="colorOption.color"
+               (click)="onColorSelect(colorOption.color)">
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="products-main">
+      <!-- Toolbar -->
+      <div class="products-toolbar">
+        <button class="filter-toggle" (click)="toggleFilterPanel()">
+          <i class="bi bi-funnel"></i> Filters
+        </button>
+        
+        <div class="sort-options">
+          <label>Sort by:</label>
+          <select [(ngModel)]="filterOptions.sortBy" (change)="applyFilters()">
+            <option value="newest">Newest</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="popular">Popularity</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="loading">
+        <div class="spinner"></div>
+        <p>Loading products...</p>
+      </div>
+
+      <!-- Products Grid -->
+      <div *ngIf="!isLoading" class="products-grid">
+        <div *ngFor="let product of filteredProducts" 
+             class="product-card"
+             (click)="navigateToProduct(product.id)">
+          
+          <!-- Product Image -->
+          <div class="product-image">
+            <img [src]="product.images[0]" [alt]="product.name">
+            
+            <!-- Discount Badge -->
+            <div *ngIf="product.discount" class="discount-badge">
+              -{{ product.discount }}%
+            </div>
+            
+            <!-- New Badge -->
+            <div *ngIf="product.isNew" class="new-badge">
+              NEW
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+              <button class="wishlist-btn" (click)="$event.stopPropagation()">
+                <i class="bi bi-heart"></i>
+              </button>
+              <button class="cart-btn" (click)="$event.stopPropagation()">
+                <i class="bi bi-cart-plus"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Product Info -->
+          <div class="product-info">
+            <div class="product-category">
+              <span class="gender-badge" [class.women]="product.gender === 'WOMEN'"
+                                           [class.men]="product.gender === 'MEN'"
+                                           [class.kids]="product.gender === 'KIDS'">
+                {{ getGenderName(product.gender) }}
+              </span>
+              <span class="category-badge">
+                {{ getCategoryName(product.category) }}
+              </span>
+            </div>
+            
+            <h3 class="product-name">{{ product.name }}</h3>
+            <p class="product-description">{{ product.description }}</p>
+            
+            <div class="product-rating">
+              <div class="stars">
+                <i *ngFor="let star of [1,2,3,4,5]" 
+                   class="bi" 
+                   [class.bi-star-fill]="star <= product.rating"
+                   [class.bi-star]="star > product.rating">
+                </i>
+              </div>
+              <span class="rating-count">({{ product.reviewCount }})</span>
+            </div>
+            
+            <div class="product-price">
+              <span class="current-price">₹{{ product.price }}</span>
+              <span *ngIf="product.originalPrice" class="original-price">
+                ₹{{ product.originalPrice }}
+              </span>
+            </div>
+            
+            <div class="product-meta">
+              <span class="size-info">
+                <i class="bi bi-rulers"></i>
+                {{ product.size.join(', ') }}
+              </span>
+              <span class="color-info">
+                <i class="bi bi-palette"></i>
+                {{ product.color.join(', ') }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- No Products Found -->
+      <div *ngIf="!isLoading && filteredProducts.length === 0" class="no-products">
+        <i class="bi bi-search"></i>
+        <h3>No products found</h3>
+        <p>Try adjusting your filters or search criteria</p>
+        <button (click)="clearFilters()" class="clear-btn">Clear All Filters</button>
+      </div>
+    </main>
   </div>
-  
-  <div class="product-grid">
-    <div class="product-card" *ngFor="let p of products">
-      <img [src]="p.imageUrl" />
-      <h4>{{ p.name }}</h4>
-      <p>₹{{ p.price }}</p>
-      <button>Add to Cart</button>
-    </div>
-  </div>
-  
+</div>
+
+<app-footer></app-footer>

@@ -4,32 +4,33 @@
 <section class="hero">
   <h1>WEAR YOUR WORLD</h1>
 
-  <div class="hero-cards">
-    <div class="hero-card">
-      <img src="homePage_img/winter.jpg" />
-      <span>Winter Wear</span>
-    </div>
+  <!-- In your home.component.html -->
+<div class="hero-cards">
+  <a [routerLink]="['/products']" [queryParams]="{category: 'WINTER'}" class="hero-card">
+    <img src="homePage_img/winter.jpg" />
+    <span>Winter Wear</span>
+  </a>
 
-    <div class="hero-card">
-      <img src="homePage_img/summer.jpg" />
-      <span>Summer Wear</span>
-    </div>
+  <a [routerLink]="['/products']" [queryParams]="{category: 'SUMMER'}" class="hero-card">
+    <img src="homePage_img/summer.jpg" />
+    <span>Summer Wear</span>
+  </a>
 
-    <div class="hero-card">
-      <img src="homePage_img/formal.jpg" />
-      <span>Formal Wear</span>
-    </div>
-    
-    <div class="hero-card">
-      <img src="homePage_img/casual.jpg" />
-      <span>Casual Wear</span>
-    </div>
-    
-    <div class="hero-card">
-      <img src="homePage_img/traditional.jpg" />
-      <span>Traditional Wear</span>
-    </div>
-  </div>
+  <a [routerLink]="['/products']" [queryParams]="{category: 'FORMAL'}" class="hero-card">
+    <img src="homePage_img/formal.jpg" />
+    <span>Formal Wear</span>
+  </a>
+  
+  <a [routerLink]="['/products']" [queryParams]="{category: 'CASUAL'}" class="hero-card">
+    <img src="homePage_img/casual.jpg" />
+    <span>Casual Wear</span>
+  </a>
+  
+  <a [routerLink]="['/products']" [queryParams]="{category: 'TRADITIONAL'}" class="hero-card">
+    <img src="homePage_img/traditional.jpg" />
+    <span>Traditional Wear</span>
+  </a>
+</div>
 </section>
 
 <!-- Trending Section -->

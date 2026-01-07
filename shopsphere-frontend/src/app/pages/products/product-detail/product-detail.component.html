@@ -1,0 +1,202 @@
+<!-- src/app/components/product-detail/product-detail.component.html -->
+<app-navbar></app-navbar>
+
+<div *ngIf="isLoading" class="loading-container">
+  <div class="spinner"></div>
+  <p>Loading product...</p>
+</div>
+
+<div *ngIf="!isLoading && product" class="product-detail-page">
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a [routerLink]="['/']">Home</a>
+    <span> / </span>
+    <a [routerLink]="['/products']" [queryParams]="{gender: product.gender}">
+      {{ product.gender }}
+    </a>
+    <span> / </span>
+    <a [routerLink]="['/products']" [queryParams]="{category: product.category}">
+      {{ product.category }}
+    </a>
+    <span> / </span>
+    <span>{{ product.name }}</span>
+  </div>
+
+  <div class="product-container">
+    <!-- Product Images -->
+    <div class="product-images">
+      <div class="main-image">
+        <img [src]="product.images[selectedImageIndex]" [alt]="product.name">
+        <div *ngIf="product.discount" class="discount-tag">
+          -{{ getDiscountPercentage() }}%
+        </div>
+        <div *ngIf="product.isNew" class="new-tag">
+          NEW
+        </div>
+      </div>
+      
+      <div class="thumbnail-images">
+        <div *ngFor="let image of product.images; let i = index" 
+             class="thumbnail"
+             [class.active]="i === selectedImageIndex"
+             (click)="selectImage(i)">
+          <img [src]="image" [alt]="'Thumbnail ' + (i + 1)">
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Info -->
+    <div class="product-info">
+      <div class="product-header">
+        <div class="product-category">
+          <span class="gender-badge" [class.women]="product.gender === 'WOMEN'"
+                                       [class.men]="product.gender === 'MEN'"
+                                       [class.kids]="product.gender === 'KIDS'">
+            {{ product.gender }}
+          </span>
+          <span class="category-badge">
+            {{ product.category }}
+          </span>
+        </div>
+        
+        <h1 class="product-title">{{ product.name }}</h1>
+        
+        <div class="product-rating">
+          <div class="stars">
+            <i *ngFor="let star of [1,2,3,4,5]" 
+               class="bi" 
+               [class.bi-star-fill]="star <= product.rating"
+               [class.bi-star]="star > product.rating">
+            </i>
+          </div>
+          <span class="rating-value">{{ product.rating }}</span>
+          <span class="review-count">({{ product.reviewCount }} reviews)</span>
+          <span class="stock-status" [class.in-stock]="product.inStock">
+            {{ product.inStock ? 'In Stock' : 'Out of Stock' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="product-description">
+        <h3>Description</h3>
+        <p>{{ product.description }}</p>
+      </div>
+
+      <div class="product-price-section">
+        <div class="price-container">
+          <span class="current-price">₹{{ getDiscountedPrice() }}</span>
+          <span *ngIf="product.originalPrice" class="original-price">
+            ₹{{ product.originalPrice }}
+          </span>
+          <span *ngIf="product.discount" class="discount-percentage">
+            (Save {{ getDiscountPercentage() }}%)
+          </span>
+        </div>
+      </div>
+
+      <!-- Size Selection -->
+      <div class="size-selection">
+        <h4>Size</h4>
+        <div class="size-options">
+          <button *ngFor="let size of product.size" 
+                  class="size-option"
+                  [class.selected]="selectedSize === size"
+                  (click)="selectSize(size)">
+            {{ size }}
+          </button>
+        </div>
+        <a href="#" class="size-guide">Size Guide</a>
+      </div>
+
+      <!-- Color Selection -->
+      <div class="color-selection">
+        <h4>Color: {{ selectedColor || 'Select Color' }}</h4>
+        <div class="color-options">
+          <div *ngFor="let color of product.color" 
+               class="color-option"
+               [class.selected]="selectedColor === color"
+               [style.backgroundColor]="color.toLowerCase()"
+               [title]="color"
+               (click)="selectColor(color)">
+            <div class="checkmark" *ngIf="selectedColor === color">✓</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quantity & Actions -->
+      <div class="quantity-actions">
+        <div class="quantity-selector">
+          <button (click)="decreaseQuantity()" [disabled]="quantity <= 1">-</button>
+          <input type="number" [(ngModel)]="quantity" min="1" readonly>
+          <button (click)="increaseQuantity()">+</button>
+        </div>
+
+        <div class="action-buttons">
+          <button class="add-to-cart" (click)="addToCart()" [disabled]="!product.inStock">
+            <i class="bi bi-cart-plus"></i>
+            Add to Cart
+          </button>
+          <button class="buy-now" (click)="buyNow()" [disabled]="!product.inStock">
+            Buy Now
+          </button>
+          <button class="wishlist-btn" (click)="addToWishlist()">
+            <i class="bi bi-heart"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Product Details -->
+      <div class="product-details">
+        <h4>Product Details</h4>
+        <div class="details-grid">
+          <div class="detail-item">
+            <span class="label">Category:</span>
+            <span class="value">{{ product.category }} - {{ product.subCategory }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Material:</span>
+            <span class="value">Premium Quality Fabric</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Care Instructions:</span>
+            <span class="value">Machine Wash Cold, Tumble Dry Low</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Delivery:</span>
+            <span class="value">Free shipping on orders above ₹999</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Products -->
+  <div *ngIf="relatedProducts.length > 0" class="related-products">
+    <h2>You May Also Like</h2>
+    <div class="related-grid">
+      <div *ngFor="let relatedProduct of relatedProducts" 
+           class="related-card"
+           [routerLink]="['/product', relatedProduct.id]">
+        <img [src]="relatedProduct.images[0]" [alt]="relatedProduct.name">
+        <div class="related-info">
+          <h4>{{ relatedProduct.name }}</h4>
+          <div class="related-price">
+            <span>₹{{ relatedProduct.price }}</span>
+            <span *ngIf="relatedProduct.originalPrice" class="original">
+              ₹{{ relatedProduct.originalPrice }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!isLoading && !product" class="product-not-found">
+  <i class="bi bi-exclamation-circle"></i>
+  <h2>Product Not Found</h2>
+  <p>The product you're looking for doesn't exist or has been removed.</p>
+  <a [routerLink]="['/products']" class="browse-btn">Browse Products</a>
+</div>
+
+<app-footer></app-footer>
