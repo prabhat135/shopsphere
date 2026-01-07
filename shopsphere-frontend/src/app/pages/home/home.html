@@ -1,0 +1,40 @@
+<app-navbar></app-navbar>
+
+<!-- Hero -->
+<section class="hero">
+  <h1>WEAR YOUR WORLD</h1>
+  <div class="hero-buttons">
+    <button>Shop Women</button>
+    <button>Shop Men</button>
+    <button>Shop Kids</button>
+  </div>
+</section>
+
+<!-- Categories -->
+<section class="categories">
+  <div class="card" *ngFor="let c of categories">{{ c }}</div>
+</section>
+
+<!-- Seasonal -->
+<section class="seasonal">
+  <h2>Seasonal Collection</h2>
+  <div class="card" *ngFor="let s of seasons">{{ s }}</div>
+</section>
+
+<!-- Products -->
+<section class="products">
+  <div class="product-card" *ngFor="let p of products">
+    <img [src]="p.image" />
+    <h4>{{ p.name }}</h4>
+    <p>₹{{ p.price }}</p>
+    <button>❤️</button>
+  </div>
+</section>
+
+<!-- Pagination -->
+<div class="pagination">
+  <button>Prev</button>
+  <button>Next</button>
+</div>
+
+<app-footer></app-footer>
