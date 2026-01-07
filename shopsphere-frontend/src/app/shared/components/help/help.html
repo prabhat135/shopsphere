@@ -1,0 +1,115 @@
+<div class="help-container">
+  <header class="help-header">
+    <h1><i class="bi bi-question-circle"></i> Help & Support</h1>
+    <p>Find answers to frequently asked questions or contact our support team</p>
+  </header>
+
+  <div class="help-content">
+    <!-- FAQ Section -->
+    <section class="faq-section">
+      <h2><i class="bi bi-question-octagon"></i> Frequently Asked Questions</h2>
+      
+      <div class="faq-item"  [class.active]="isFaqActive(0)" (click)="toggleFaq(0)">
+        <div class="faq-question">
+          <span>How do I track my order?</span>
+          <i class="bi bi-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>You can track your order by logging into your account and visiting the Order History page. You'll receive tracking information via email once your order ships.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" [class.active]="isFaqActive(1)" (click)="toggleFaq(1)">
+        <div class="faq-question">
+          <span>What is your return policy?</span>
+          <i class="bi bi-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>We accept returns within 30 days of delivery. Items must be unworn, unwashed, and in original packaging with tags attached.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" [class.active]="isFaqActive(2)" (click)="toggleFaq(2)">
+        <div class="faq-question">
+          <span>How long does shipping take?</span>
+          <i class="bi bi-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>Standard shipping: 5-7 business days. Express shipping: 2-3 business days. Delivery times may vary based on location.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" [class.active]="isFaqActive(3)" (click)="toggleFaq(3)">
+        <div class="faq-question">
+          <span>How do I change my account information?</span>
+          <i class="bi bi-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>You can update your account information by going to the Manage Account section in your Profile page.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+      <h2><i class="bi bi-headset"></i> Contact Support</h2>
+      
+      <div class="contact-methods">
+        <div class="contact-card">
+          <i class="bi bi-envelope"></i>
+          <h3>Email Us</h3>
+          <p>support@shopsphere.com</p>
+          <p>Response time: 24 hours</p>
+        </div>
+
+        <div class="contact-card">
+          <i class="bi bi-telephone"></i>
+          <h3>Call Us</h3>
+          <p>1-800-SHOP-123</p>
+          <p>Mon-Fri: 9AM-6PM EST</p>
+        </div>
+
+        <div class="contact-card">
+          <i class="bi bi-chat-dots"></i>
+          <h3>Live Chat</h3>
+          <p>Available 24/7</p>
+          <p>Click the chat icon in the bottom right</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Links -->
+    <section class="quick-links">
+      <h2><i class="bi bi-link"></i> Quick Links</h2>
+      
+      <div class="links-grid">
+        <a routerLink="/order-history" class="link-item">
+          <i class="bi bi-clock-history"></i>
+          <span>Order History</span>
+        </a>
+        
+        <a routerLink="/manage-account" class="link-item">
+          <i class="bi bi-person-gear"></i>
+          <span>Manage Account</span>
+        </a>
+        
+        <a routerLink="/manage-address" class="link-item">
+          <i class="bi bi-geo-alt"></i>
+          <span>Manage Address</span>
+        </a>
+        
+        <a routerLink="/wishlist" class="link-item">
+          <i class="bi bi-heart"></i>
+          <span>Wishlist</span>
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <!-- Back Button -->
+  <div class="back-container">
+    <button routerLink="/profile" class="back-btn">
+      <i class="bi bi-arrow-left"></i> Back to Profile
+    </button>
+  </div>
+</div>
