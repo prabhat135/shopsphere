@@ -1,24 +1,66 @@
 <app-navbar></app-navbar>
 
-<!-- Hero -->
+<!-- Hero Section -->
 <section class="hero">
   <h1>WEAR YOUR WORLD</h1>
-  <div class="hero-buttons">
-    <button>Shop Women</button>
-    <button>Shop Men</button>
-    <button>Shop Kids</button>
+
+  <div class="hero-cards">
+    <div class="hero-card">
+      <img src="homePage_img/winter.jpg" />
+      <span>Winter Wear</span>
+    </div>
+
+    <div class="hero-card">
+      <img src="homePage_img/summer.jpg" />
+      <span>Summer Wear</span>
+    </div>
+
+    <div class="hero-card">
+      <img src="homePage_img/formal.jpg" />
+      <span>Formal Wear</span>
+    </div>
+    
+    <div class="hero-card">
+      <img src="homePage_img/casual.jpg" />
+      <span>Casual Wear</span>
+    </div>
+    
+    <div class="hero-card">
+      <img src="homePage_img/traditional.jpg" />
+      <span>Traditional Wear</span>
+    </div>
   </div>
 </section>
 
-<!-- Categories -->
-<section class="categories">
-  <div class="card" *ngFor="let c of categories">{{ c }}</div>
-</section>
-
-<!-- Seasonal -->
-<section class="seasonal">
-  <h2>Seasonal Collection</h2>
-  <div class="card" *ngFor="let s of seasons">{{ s }}</div>
+<!-- Trending Section -->
+<section class="trending">
+  <h2>TRENDING</h2>
+  <div class="carousel-container">
+    <button class="carousel-btn prev" (click)="prevSlide()">
+      <i class="bi bi-chevron-left"></i>
+    </button>
+    <div class="carousel">
+      <div class="carousel-track" [style.transform]="'translateX(' + (-100 * currentSlide) + '%)'">
+        <div class="carousel-slide" *ngFor="let item of trendingProducts">
+          <a [routerLink]="['/product', item.productId]">
+            <img [src]="item.imageUrl" class="carousel-image" [alt]="'Trending product ' + item.productId">
+          </a>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-btn next" (click)="nextSlide()">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+    
+    <!-- Carousel Indicators -->
+    <div class="carousel-indicators">
+      <div *ngFor="let item of trendingProducts; let i = index" 
+           [class.active]="i === currentSlide"
+           class="indicator"
+           (click)="goToSlide(i)">
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- Products -->
@@ -31,10 +73,5 @@
   </div>
 </section>
 
-<!-- Pagination -->
-<div class="pagination">
-  <button>Prev</button>
-  <button>Next</button>
-</div>
 
 <app-footer></app-footer>
