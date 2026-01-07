@@ -1,0 +1,21 @@
+<div class="style-tabs">
+    <button (click)="loadProducts('TRADITIONAL','MEN')">Traditional</button>
+    <button (click)="loadProducts('WESTERN','MEN')">Western</button>
+    <button (click)="loadProducts('SEASONAL','MEN')">Seasonal</button>
+  </div>
+  
+  <div class="gender-tabs">
+    <button (click)="loadProducts(selectedStyle,'MEN')">Men</button>
+    <button (click)="loadProducts(selectedStyle,'WOMEN')">Women</button>
+    <button (click)="loadProducts(selectedStyle,'KIDS')">Kids</button>
+  </div>
+  
+  <div class="product-grid">
+    <div class="product-card" *ngFor="let p of products">
+      <img [src]="p.imageUrl" />
+      <h4>{{ p.name }}</h4>
+      <p>₹{{ p.price }}</p>
+      <button>Add to Cart</button>
+    </div>
+  </div>
+  
