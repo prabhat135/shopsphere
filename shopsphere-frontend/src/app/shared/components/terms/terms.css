@@ -1,0 +1,251 @@
+/* Main Container */
+.terms-container {
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  /* Header */
+  .terms-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 30px 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  
+  .terms-header h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .terms-header h1 i {
+    color: #28a745;
+  }
+  
+  .terms-header p {
+    color: #666;
+    font-size: 0.95rem;
+  }
+  
+  /* Content */
+  .terms-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  /* Sections */
+  .section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  
+  .section h2 {
+    font-size: 1.3rem;
+    color: #333;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 10px;
+  }
+  
+  .section h2 i {
+    color: #28a745;
+  }
+  
+  .section p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 15px;
+  }
+  
+  .section ul {
+    margin: 15px 0;
+    padding-left: 20px;
+    color: #555;
+  }
+  
+  .section li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  
+  /* Contact Info */
+  .contact-info {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 15px;
+  }
+  
+  .contact-info p {
+    margin: 8px 0;
+  }
+  
+  .contact-info strong {
+    color: #333;
+  }
+  
+  /* Actions */
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .back-btn, .print-btn {
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    flex-shrink: 0;
+  }
+  
+  .back-btn {
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .back-btn:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+  }
+  
+  .print-btn {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .print-btn:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+  }
+  
+  /* Agreement */
+  .agreement {
+    flex: 1;
+    text-align: center;
+    min-width: 250px;
+  }
+  
+  .agreement label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #555;
+    cursor: pointer;
+    font-size: 0.95rem;
+  }
+  
+  .agreement input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .terms-container {
+      padding: 15px;
+    }
+    
+    .terms-header {
+      padding: 20px 15px;
+    }
+    
+    .terms-header h1 {
+      font-size: 1.6rem;
+    }
+    
+    .section {
+      padding: 20px;
+    }
+    
+    .actions {
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .agreement {
+      order: 2;
+      width: 100%;
+    }
+    
+    .back-btn, .print-btn {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .back-btn {
+      order: 1;
+    }
+    
+    .print-btn {
+      order: 3;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .terms-header h1 {
+      font-size: 1.4rem;
+      flex-direction: column;
+      gap: 5px;
+    }
+    
+    .section h2 {
+      font-size: 1.2rem;
+    }
+    
+    .back-btn, .print-btn {
+      padding: 10px 20px;
+      font-size: 0.95rem;
+    }
+    
+    .agreement label {
+      font-size: 0.9rem;
+    }
+  }
+  
+  /* Print Styles */
+  @media print {
+    .terms-container {
+      padding: 0;
+      background: white;
+    }
+    
+    .actions {
+      display: none;
+    }
+    
+    .section {
+      box-shadow: none;
+      border: 1px solid #ddd;
+      page-break-inside: avoid;
+    }
+  }

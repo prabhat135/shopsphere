@@ -1,0 +1,80 @@
+<div class="profile-container">
+    <!-- Header -->
+    <div class="profile-header">
+      <h1>PROFILE</h1>
+      <div class="user-info">
+        <div class="avatar">
+          <i class="bi bi-person-circle"></i>
+        </div>
+        <h2>John Doe</h2>
+        <p class="email">johndoe@example.com</p>
+      </div>
+    </div>
+  
+    <!-- Action Buttons Grid -->
+    <div class="action-grid">
+      <button class="action-card" routerLink="/order-history">
+        <i class="bi bi-clock-history"></i>
+        <span>Order History</span>
+      </button>
+      
+      <button class="action-card" routerLink="/help">
+        <i class="bi bi-question-circle"></i>
+        <span>Help</span>
+      </button>
+      
+      <button class="action-card" routerLink="/manage-account">
+        <i class="bi bi-person-gear"></i>
+        <span>Manage Account</span>
+      </button>
+      
+      <button class="action-card" routerLink="/manage-address">
+        <i class="bi bi-geo-alt"></i>
+        <span>Manage Address</span>
+      </button>
+      
+      <button class="action-card" routerLink="/wishlist">
+        <i class="bi bi-heart"></i>
+        <span>Wishlist</span>
+      </button>
+    </div>
+  
+    <!-- Links Section -->
+    <div class="links-section">
+      <h3>Information</h3>
+      <div class="links-grid">
+        <a href="#" class="link-item">
+          <i class="bi bi-question-octagon"></i>
+          <span>FAQs</span>
+          <i class="bi bi-chevron-right"></i>
+        </a>
+        
+        <a href="#" class="link-item">
+          <i class="bi bi-info-circle"></i>
+          <span>About Us</span>
+          <i class="bi bi-chevron-right"></i>
+        </a>
+        
+        <a routerLink="/terms" class="link-item">
+          <i class="bi bi-shield-check"></i>
+          <span>Terms of Use</span>
+          <i class="bi bi-chevron-right"></i>
+        </a>
+        
+        <a routerLink="/privacy" class="link-item">
+          <i class="bi bi-shield-check"></i>
+          <span>Privacy</span>
+          <i class="bi bi-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+  
+    <!-- Logout Button -->
+    <div class="logout-container">
+      <button class="logout-btn" (click)="logout()">
+        <i class="bi bi-box-arrow-right"></i>
+        Logout
+      </button>
+    </div>
+  </div>
+<app-footer></app-footer>

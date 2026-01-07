@@ -1,0 +1,102 @@
+<div class="terms-container">
+    <header class="terms-header">
+      <h1><i class="bi bi-file-text"></i> Terms of Use</h1>
+      <p>Last updated: December 2023</p>
+    </header>
+  
+    <div class="terms-content">
+      <section class="section">
+        <h2><i class="bi bi-check-circle"></i> Acceptance of Terms</h2>
+        <p>By accessing and using ShopSphere, you accept and agree to be bound by these Terms of Use. If you do not agree, please do not use our services.</p>
+      </section>
+  
+      <section class="section">
+        <h2><i class="bi bi-person"></i> Account Registration</h2>
+        <p>To use certain features, you must create an account. You agree to:</p>
+        <ul>
+          <li>Provide accurate and complete information</li>
+          <li>Maintain the security of your password</li>
+          <li>Accept responsibility for all activities under your account</li>
+          <li>Notify us immediately of any unauthorized use</li>
+        </ul>
+      </section>
+  
+      <section class="section">
+        <h2><i class="bi bi-bag"></i> Product Information</h2>
+        <p>We strive to display accurate product information, but we do not warrant that descriptions, prices, or other content is error-free.</p>
+        <p>We reserve the right to correct any errors and to change or update information at any time.</p>
+      </section>
+  
+      <section class="section">
+        <h2><i class="bi bi-credit-card"></i> Payments & Pricing</h2>
+        <p>All prices are in Indian Rupees (₹). We accept various payment methods as displayed at checkout.</p>
+        <p>You agree to pay all charges incurred by your account, including applicable taxes.</p>
+      </section>
+  
+      <section class="section">
+        <h2><i class="bi bi-truck"></i> Shipping & Delivery</h2>
+        <p>Shipping times are estimates and not guaranteed. We are not responsible for delays caused by shipping carriers or unforeseen circumstances.</p>
+        <p>Risk of loss passes to you upon delivery of products to the carrier.</p>
+      </section>
+  
+      <section class="section">
+        <h2><i class="bi bi-arrow-counterclockwise"></i> Returns & Refunds</h2>
+        <p>Returns are accepted within 30 days of delivery. Items must be:</p>
+        <ul>
+          <li>Unworn and unwashed</li>
+          <li>In original packaging</li>
+          <li>With tags attached</li>
+        </ul>
+        <p>Refunds are processed within 7-10 business days after we receive the returned item.</p>
+      </section>
+  
+      <section class="section">
+        <h2><i class="bi bi-ban"></i> Prohibited Activities</h2>
+        <p>You agree not to:</p>
+        <ul>
+          <li>Use the site for any illegal purpose</li>
+          <li>Attempt to gain unauthorized access</li>
+          <li>Interfere with the site's operation</li>
+          <li>Use automated systems to access the site</li>
+          <li>Post false or misleading information</li>
+        </ul>
+      </section>
+  
+      <section class="section">
+        <h2><i class="bi bi-shield-exclamation"></i> Limitation of Liability</h2>
+        <p>ShopSphere shall not be liable for any indirect, incidental, or consequential damages arising from your use of our services.</p>
+        <p>Our total liability shall not exceed the amount you paid for the product in question.</p>
+      </section>
+  
+      <section class="section">
+        <h2><i class="bi bi-pencil"></i> Changes to Terms</h2>
+        <p>We may modify these terms at any time. We will notify you of significant changes via email or site notification.</p>
+        <p>Continued use after changes constitutes acceptance of the new terms.</p>
+      </section>
+  
+      <section class="section">
+        <h2><i class="bi bi-envelope"></i> Contact Information</h2>
+        <p>For questions about these terms, contact us:</p>
+        <div class="contact-info">
+          <p><strong>Email:</strong> legal@shopsphere.com</p>
+          <p><strong>Phone:</strong> 1-800-TERMS-123</p>
+          <p><strong>Address:</strong> 123 Fashion Street, Mumbai, India</p>
+        </div>
+      </section>
+    </div>
+  
+    <div class="actions">
+      <button routerLink="/profile" class="back-btn">
+        <i class="bi bi-arrow-left"></i> Back to Profile
+      </button>
+      <div class="agreement">
+        <label>
+          <input type="checkbox" (change)="toggleAgreement($event)">
+          I have read and agree to the Terms of Use
+        </label>
+      </div>
+      <button class="print-btn" (click)="printPage()">
+        <i class="bi bi-printer"></i> Print Terms
+      </button>
+    </div>
+  </div>
