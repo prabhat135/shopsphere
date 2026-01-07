@@ -1,78 +1,285 @@
+<!-- home.component.html -->
 <app-navbar></app-navbar>
 
 <!-- Hero Section -->
 <section class="hero">
-  <h1>WEAR YOUR WORLD</h1>
+  <div class="hero-content">
+    <h1 class="hero-title">WEAR YOUR WORLD</h1>
+    <p class="hero-subtitle">Discover the perfect style for every occasion</p>
+    <p class="hero-description">From casual comfort to formal elegance, find everything you need to express your unique style</p>
+    <a [routerLink]="['/products']" class="shop-now-btn">SHOP NOW</a>
+  </div>
 
-  <!-- In your home.component.html -->
-<div class="hero-cards">
-  <a [routerLink]="['/products']" [queryParams]="{category: 'WINTER'}" class="hero-card">
-    <img src="homePage_img/winter.jpg" />
-    <span>Winter Wear</span>
-  </a>
+  <!-- Category Cards -->
+  <div class="hero-cards">
+    <a [routerLink]="['/products']" [queryParams]="{category: 'WINTER'}" class="hero-card winter">
+      <div class="card-overlay"></div>
+      <img src="assets/homePage_img/winter.jpg" alt="Winter Wear" />
+      <div class="card-content">
+        <span class="card-title">Winter Wear</span>
+        <p class="card-desc">Stay warm in style</p>
+        <span class="explore-btn">Explore →</span>
+      </div>
+    </a>
 
-  <a [routerLink]="['/products']" [queryParams]="{category: 'SUMMER'}" class="hero-card">
-    <img src="homePage_img/summer.jpg" />
-    <span>Summer Wear</span>
-  </a>
+    <a [routerLink]="['/products']" [queryParams]="{category: 'SUMMER'}" class="hero-card summer">
+      <div class="card-overlay"></div>
+      <img src="assets/homePage_img/summer.jpg" alt="Summer Wear" />
+      <div class="card-content">
+        <span class="card-title">Summer Wear</span>
+        <p class="card-desc">Light and breezy fashion</p>
+        <span class="explore-btn">Explore →</span>
+      </div>
+    </a>
 
-  <a [routerLink]="['/products']" [queryParams]="{category: 'FORMAL'}" class="hero-card">
-    <img src="homePage_img/formal.jpg" />
-    <span>Formal Wear</span>
-  </a>
+    <a [routerLink]="['/products']" [queryParams]="{category: 'FORMAL'}" class="hero-card formal">
+      <div class="card-overlay"></div>
+      <img src="assets/homePage_img/formal.jpg" alt="Formal Wear" />
+      <div class="card-content">
+        <span class="card-title">Formal Wear</span>
+        <p class="card-desc">Elegance redefined</p>
+        <span class="explore-btn">Explore →</span>
+      </div>
+    </a>
+    
+    <a [routerLink]="['/products']" [queryParams]="{category: 'CASUAL'}" class="hero-card casual">
+      <div class="card-overlay"></div>
+      <img src="assets/homePage_img/casual.jpg" alt="Casual Wear" />
+      <div class="card-content">
+        <span class="card-title">Casual Wear</span>
+        <p class="card-desc">Comfort meets style</p>
+        <span class="explore-btn">Explore →</span>
+      </div>
+    </a>
+    
+    <a [routerLink]="['/products']" [queryParams]="{category: 'TRADITIONAL'}" class="hero-card traditional">
+      <div class="card-overlay"></div>
+      <img src="assets/homePage_img/traditional.jpg" alt="Traditional Wear" />
+      <div class="card-content">
+        <span class="card-title">Traditional Wear</span>
+        <p class="card-desc">Heritage fashion</p>
+        <span class="explore-btn">Explore →</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- Featured Categories -->
+<section class="featured-categories">
+  <div class="section-header">
+    <h2>SHOP BY CATEGORY</h2>
+    <p>Browse through our curated collections</p>
+  </div>
   
-  <a [routerLink]="['/products']" [queryParams]="{category: 'CASUAL'}" class="hero-card">
-    <img src="homePage_img/casual.jpg" />
-    <span>Casual Wear</span>
-  </a>
-  
-  <a [routerLink]="['/products']" [queryParams]="{category: 'TRADITIONAL'}" class="hero-card">
-    <img src="homePage_img/traditional.jpg" />
-    <span>Traditional Wear</span>
-  </a>
-</div>
+  <div class="categories-grid">
+    <div class="category-card" [routerLink]="['/products']" [queryParams]="{gender: 'WOMEN'}">
+      <div class="category-icon">
+        <i class="bi bi-gender-female"></i>
+      </div>
+      <h3>Women's Fashion</h3>
+      <p>Dresses, tops, skirts & more</p>
+      <span class="shop-link">Shop Now →</span>
+    </div>
+    
+    <div class="category-card" [routerLink]="['/products']" [queryParams]="{gender: 'MEN'}">
+      <div class="category-icon">
+        <i class="bi bi-gender-male"></i>
+      </div>
+      <h3>Men's Fashion</h3>
+      <p>Shirts, pants, suits & more</p>
+      <span class="shop-link">Shop Now →</span>
+    </div>
+    
+    <div class="category-card" [routerLink]="['/products']" [queryParams]="{gender: 'KIDS'}">
+      <div class="category-icon">
+        <i class="bi bi-people"></i>
+      </div>
+      <h3>Kids' Collection</h3>
+      <p>Adorable outfits for kids</p>
+      <span class="shop-link">Shop Now →</span>
+    </div>
+    
+    <div class="category-card" [routerLink]="['/products']" [queryParams]="{gender: 'UNISEX'}">
+      <div class="category-icon">
+        <i class="bi bi-arrow-left-right"></i>
+      </div>
+      <h3>Unisex Styles</h3>
+      <p>Fashion for everyone</p>
+      <span class="shop-link">Shop Now →</span>
+    </div>
+  </div>
 </section>
 
 <!-- Trending Section -->
 <section class="trending">
-  <h2>TRENDING</h2>
+  <div class="section-header">
+    <h2>TRENDING NOW</h2>
+    <p>Discover what's hot this season</p>
+  </div>
+  
   <div class="carousel-container">
-    <button class="carousel-btn prev" (click)="prevSlide()">
-      <i class="bi bi-chevron-left"></i>
-    </button>
-    <div class="carousel">
-      <div class="carousel-track" [style.transform]="'translateX(' + (-100 * currentSlide) + '%)'">
-        <div class="carousel-slide" *ngFor="let item of trendingProducts">
-          <a [routerLink]="['/product', item.productId]">
-            <img [src]="item.imageUrl" class="carousel-image" [alt]="'Trending product ' + item.productId">
-          </a>
+    <!-- Loading State -->
+    <div *ngIf="isLoading && trendingProducts.length === 0" class="loading-carousel">
+      <div class="spinner"></div>
+      <p>Loading trending products...</p>
+    </div>
+    
+    <!-- Carousel -->
+    <div *ngIf="!isLoading || trendingProducts.length > 0">
+      <button class="carousel-btn prev" (click)="prevSlide()" [disabled]="trendingProducts.length <= 1">
+        <i class="bi bi-chevron-left"></i>
+      </button>
+      
+      <div class="carousel">
+        <div class="carousel-track" [style.transform]="'translateX(' + (-100 * currentSlide) + '%)'">
+          <div class="carousel-slide" *ngFor="let item of trendingProducts">
+            <div class="slide-content">
+              <a [routerLink]="['/product', item.productId]" class="product-link">
+                <img [src]="item.imageUrl" class="carousel-image" [alt]="item.name || 'Trending product'">
+                <div class="slide-overlay">
+                  <div class="product-info">
+                    <h3>{{ item.name || 'Trending Fashion' }}</h3>
+                    <p *ngIf="item.price" class="price">₹{{ item.price }}</p>
+                    <span class="view-btn">View Details</span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <button class="carousel-btn next" (click)="nextSlide()" [disabled]="trendingProducts.length <= 1">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+      
+      <!-- Carousel Indicators -->
+      <div class="carousel-indicators" *ngIf="trendingProducts.length > 1">
+        <div *ngFor="let item of trendingProducts; let i = index" 
+             [class.active]="i === currentSlide"
+             class="indicator"
+             (click)="goToSlide(i)">
         </div>
       </div>
     </div>
-    <button class="carousel-btn next" (click)="nextSlide()">
-      <i class="bi bi-chevron-right"></i>
-    </button>
-    
-    <!-- Carousel Indicators -->
-    <div class="carousel-indicators">
-      <div *ngFor="let item of trendingProducts; let i = index" 
-           [class.active]="i === currentSlide"
-           class="indicator"
-           (click)="goToSlide(i)">
+  </div>
+</section>
+
+<!-- Featured Products -->
+<section class="featured-products">
+  <div class="section-header">
+    <h2>NEW ARRIVALS</h2>
+    <p>Fresh styles just for you</p>
+    <a [routerLink]="['/products']" class="view-all">View All →</a>
+  </div>
+  
+  <!-- Loading State -->
+  <div *ngIf="isLoading && products.length === 0" class="loading-products">
+    <div class="spinner"></div>
+    <p>Loading products...</p>
+  </div>
+  
+  <!-- Products Grid -->
+  <div class="products-grid">
+    <div class="product-card" *ngFor="let p of products" [routerLink]="['/product', p.id]">
+      <div class="product-image">
+        <img [src]="p.image" [alt]="p.name" />
+        
+        <!-- Quick Actions -->
+        <div class="product-actions">
+          <button class="action-btn wishlist" (click)="$event.stopPropagation()">
+            <i class="bi bi-heart"></i>
+          </button>
+          <button class="action-btn quick-view" (click)="$event.stopPropagation()">
+            <i class="bi bi-eye"></i>
+          </button>
+        </div>
+        
+        <!-- Badges -->
+        <div class="product-badges">
+          <span *ngIf="p.isNew" class="badge new">NEW</span>
+          <span *ngIf="p.discount" class="badge discount">-{{ p.discount }}%</span>
+        </div>
+      </div>
+      
+      <div class="product-info">
+        <div class="product-category">
+          <span class="category-tag">{{ p.category || 'Fashion' }}</span>
+        </div>
+        <h4 class="product-name">{{ p.name }}</h4>
+        <div class="product-rating" *ngIf="p.rating">
+          <div class="stars">
+            <i *ngFor="let star of [1,2,3,4,5]" 
+               class="bi" 
+               [class.bi-star-fill]="star <= p.rating"
+               [class.bi-star]="star > p.rating">
+            </i>
+          </div>
+          <span class="rating-count">({{ p.reviewCount || 0 }})</span>
+        </div>
+        <p class="product-price">₹{{ p.price }}</p>
+        <p *ngIf="p.originalPrice" class="original-price">₹{{ p.originalPrice }}</p>
+        
+        <div class="product-sizes" *ngIf="p.sizes && p.sizes.length">
+          <span class="size-label">Sizes:</span>
+          <div class="size-chips">
+            <span class="size-chip" *ngFor="let size of p.sizes.slice(0, 3)">{{ size }}</span>
+            <span *ngIf="p.sizes.length > 3" class="size-chip more">+{{ p.sizes.length - 3 }}</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Products -->
-<section class="products">
-  <div class="product-card" *ngFor="let p of products">
-    <img [src]="p.image" />
-    <h4>{{ p.name }}</h4>
-    <p>₹{{ p.price }}</p>
-    <button>❤️</button>
+<!-- Features Section -->
+<section class="features">
+  <div class="features-grid">
+    <div class="feature">
+      <div class="feature-icon">
+        <i class="bi bi-truck"></i>
+      </div>
+      <h3>Free Shipping</h3>
+      <p>On orders above ₹999</p>
+    </div>
+    
+    <div class="feature">
+      <div class="feature-icon">
+        <i class="bi bi-arrow-clockwise"></i>
+      </div>
+      <h3>Easy Returns</h3>
+      <p>30-day return policy</p>
+    </div>
+    
+    <div class="feature">
+      <div class="feature-icon">
+        <i class="bi bi-shield-check"></i>
+      </div>
+      <h3>Secure Payment</h3>
+      <p>100% secure transactions</p>
+    </div>
+    
+    <div class="feature">
+      <div class="feature-icon">
+        <i class="bi bi-headset"></i>
+      </div>
+      <h3>24/7 Support</h3>
+      <p>Customer care always available</p>
+    </div>
   </div>
 </section>
 
+<!-- Newsletter Section -->
+<section class="newsletter">
+  <div class="newsletter-content">
+    <h2>STAY IN STYLE</h2>
+    <p>Subscribe to our newsletter for the latest trends and exclusive offers</p>
+    <div class="subscribe-form">
+      <input type="email" placeholder="Enter your email address" />
+      <button type="submit">Subscribe</button>
+    </div>
+    <p class="privacy-note">By subscribing, you agree to our Privacy Policy</p>
+  </div>
+</section>
 
 <app-footer></app-footer>

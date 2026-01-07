@@ -52,6 +52,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadInitialProducts();
+    this.loadFilterOptions();
+    
     this.routeSub = this.route.queryParams.subscribe(params => {
       const gender = params['gender'] as string;
       const category = params['category'] as string;
@@ -79,14 +81,101 @@ export class ProductsComponent implements OnInit, OnDestroy {
   loadInitialProducts(): void {
     this.isLoading = true;
     this.productService.getAllProducts().subscribe({
-      next: (products) => {
-        this.products = products;
-        this.filteredProducts = [...products];
-        this.initializeFilterOptions();
+      next: (response) => {
+        if (response.success) {
+          this.products = response.data;
+          this.filteredProducts = [...response.data];
+          this.calculateFilterCounts();
+        }
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Error loading products:', error);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  loadFilterOptions(): void {
+    // Load categories
+    this.productService.getAllCategories().subscribe({
+      next: (response) => {
+        if (response.success) {
+          response.data.forEach(category => {
+            this.allCategories.push({ category, count: 0 });
+          });
+        }
+      }
+    });
+
+    // Load genders
+    this.productService.getAllGenders().subscribe({
+      next: (response) => {
+        if (response.success) {
+          response.data.forEach(gender => {
+            this.allGenders.push({ gender, count: 0 });
+          });
+        }
+      }
+    });
+
+    // Load sizes
+    this.productService.getAllSizes().subscribe({
+      next: (response) => {
+        if (response.success) {
+          response.data.forEach(size => {
+            this.allSizes.push({ size, count: 0 });
+          });
+        }
+      }
+    });
+
+    // Load colors
+    this.productService.getAllColors().subscribe({
+      next: (response) => {
+        if (response.success) {
+          response.data.forEach(color => {
+            this.allColors.push({ color, count: 0 });
+          });
+        }
+      }
+    });
+  }
+
+  calculateFilterCounts(): void {
+    // Calculate category counts
+    this.allCategories.forEach(item => {
+      item.count = this.products.filter(p => p.category === item.category).length;
+    });
+
+    // Calculate gender counts
+    this.allGenders.forEach(item => {
+      item.count = this.products.filter(p => p.gender === item.gender).length;
+    });
+
+    // Calculate size counts
+    this.allSizes.forEach(item => {
+      item.count = this.products.filter(p => p.sizes.includes(item.size)).length;
+    });
+
+    // Calculate color counts
+    this.allColors.forEach(item => {
+      item.count = this.products.filter(p => p.colors.includes(item.color)).length;
+    });
+  }
+
+  applyFilters(): void {
+    this.isLoading = true;
+    
+    this.productService.filterProducts(this.filterOptions).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.filteredProducts = response.data;
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error filtering products:', error);
         this.isLoading = false;
       }
     });
@@ -118,7 +207,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     // Initialize sizes with counts
     const sizeCounts = new Map<string, number>();
     this.products.forEach(product => {
-      product.size.forEach(size => {
+      product.sizes.forEach(size => {
         sizeCounts.set(size, (sizeCounts.get(size) || 0) + 1);
       });
     });
@@ -131,7 +220,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     // Initialize colors with counts
     const colorCounts = new Map<string, number>();
     this.products.forEach(product => {
-      product.color.forEach(color => {
+      product.colors.forEach(color => {
         colorCounts.set(color, (colorCounts.get(color) || 0) + 1);
       });
     });
@@ -140,21 +229,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
       color,
       count
     }));
-  }
-
-  applyFilters(): void {
-    this.isLoading = true;
-    
-    this.productService.filterProducts(this.filterOptions).subscribe({
-      next: (products) => {
-        this.filteredProducts = [...products];
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error loading products:', error);
-        this.isLoading = false;
-      }
-    });
   }
 
   onGenderSelect(gender: string): void {

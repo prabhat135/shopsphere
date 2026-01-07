@@ -98,7 +98,7 @@
       <div class="size-selection">
         <h4>Size</h4>
         <div class="size-options">
-          <button *ngFor="let size of product.size" 
+          <button *ngFor="let size of product.sizes" 
                   class="size-option"
                   [class.selected]="selectedSize === size"
                   (click)="selectSize(size)">
@@ -112,7 +112,7 @@
       <div class="color-selection">
         <h4>Color: {{ selectedColor || 'Select Color' }}</h4>
         <div class="color-options">
-          <div *ngFor="let color of product.color" 
+          <div *ngFor="let color of product.colors" 
                class="color-option"
                [class.selected]="selectedColor === color"
                [style.backgroundColor]="color.toLowerCase()"

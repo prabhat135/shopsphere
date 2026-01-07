@@ -39,16 +39,17 @@ export class ProductDetailComponent implements OnInit {
   loadProduct(id: number): void {
     this.isLoading = true;
     this.productService.getProductById(id).subscribe({
-      next: (product) => {
-        this.product = product || null;
-        if (this.product) {
-          this.loadRelatedProducts();
-          // Set default selections
-          if (this.product.size.length > 0) {
-            this.selectedSize = this.product.size[0];
-          }
-          if (this.product.color.length > 0) {
-            this.selectedColor = this.product.color[0];
+      next: (response) => {
+        if (response.success && response.data) {
+          this.product = response.data;
+          if (this.product) {
+            this.loadRelatedProducts();
+            if (this.product.sizes.length > 0) {
+              this.selectedSize = this.product.sizes[0];
+            }
+            if (this.product.colors.length > 0) {
+              this.selectedColor = this.product.colors[0];
+            }
           }
         }
         this.isLoading = false;
@@ -63,14 +64,23 @@ export class ProductDetailComponent implements OnInit {
   loadRelatedProducts(): void {
     if (!this.product) return;
     
-    this.productService.filterProducts({
+    const filterOptions = {
       categories: [this.product.category],
-      genders: [this.product.gender]
-    }).subscribe(products => {
-      // Exclude current product and limit to 4
-      this.relatedProducts = products
-        .filter(p => p.id !== this.product!.id)
-        .slice(0, 4);
+      genders: [this.product.gender],
+      priceRange: { min: 0, max: 10000 },
+      sizes: [],
+      colors: [],
+      sortBy: 'popular' as const
+    };
+    
+    this.productService.filterProducts(filterOptions).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.relatedProducts = response.data
+            .filter(p => p.id !== this.product!.id)
+            .slice(0, 4);
+        }
+      }
     });
   }
 
