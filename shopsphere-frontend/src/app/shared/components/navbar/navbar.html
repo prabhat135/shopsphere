@@ -1,42 +1,128 @@
 <header class="navbar">
-    <div class="logo">ShopSphere</div>
-  
-    <input type="text" placeholder="Search products..." class="search" />
-  
-    <nav>
-      <div class="nav-circles">
-        <div class="circle">
-          <img src="homePage_img/women.jpg" />
-          <a [routerLink]="['/products']" [queryParams]="{gender: 'WOMEN'}">Women</a>
-        </div>
-      
-        <div class="circle">
-          <img src="homePage_img/men.jpg" />
-          <a [routerLink]="['/products']" [queryParams]="{gender: 'MEN'}">Men</a>
-        </div>
-      
-        <div class="circle">
-          <img src="homePage_img/kids.jpg" />
-          <a [routerLink]="['/products']" [queryParams]="{gender: 'KIDS'}">Kids</a>
-        </div>
+  <!-- App Logo -->
+  <div class="logo-container">
+    <a routerLink="/" class="logo-link">
+      <div class="logo-square">
+        <span class="logo-text">SS</span>
       </div>
-      
-    </nav>
-  
-    <div class="icons">
-      <a routerLink="/wishlist" title="Wishlist">
-        <i class="bi bi-heart"></i>
-      </a>
+      <span class="logo-name">ShopSphere</span>
+    </a>
+  </div>
+
+  <!-- Square Search Bar -->
+  <div class="search-container">
+    <form (submit)="onSearch(); $event.preventDefault()" class="search-form">
+      <div class="search-box">
+        <button type="submit" class="search-btn">
+          <i class="bi bi-search"></i>
+        </button>
+        <input 
+          type="text" 
+          [(ngModel)]="searchQuery"
+          name="searchQuery"
+          placeholder="Search products..."
+          class="search-input"
+          (keyup.enter)="onSearch()" />
+      </div>
+    </form>
+  </div>
+
+  <!-- Categories -->
+  <nav class="categories">
+    <div class="nav-circles">
+      <div class="circle">
+        <img src="homePage_img/women.jpg" alt="Women" />
+        <a [routerLink]="['/products']" [queryParams]="{gender: 'WOMEN'}" class="circle-link">Women</a>
+      </div>
     
-      <a routerLink="/cart" title="Cart">
-        <i class="bi bi-cart"></i>
-      </a>
+      <div class="circle">
+        <img src="homePage_img/men.jpg" alt="Men" />
+        <a [routerLink]="['/products']" [queryParams]="{gender: 'MEN'}" class="circle-link">Men</a>
+      </div>
     
-      <a routerLink="/profile" title="Profile">
-        <i class="bi bi-person"></i>
-      </a>
+      <div class="circle">
+        <img src="homePage_img/kids.jpg" alt="Kids" />
+        <a [routerLink]="['/products']" [queryParams]="{gender: 'KIDS'}" class="circle-link">Kids</a>
+      </div>
     </div>
-    
-    
-  </header>
-  
+  </nav>
+
+  <!-- Action Icons -->
+  <div class="action-icons">
+    <!-- Wishlist Icon -->
+    <a routerLink="/wishlist" class="icon-link" title="Wishlist">
+      <div class="icon-wrapper">
+        <i class="bi bi-heart"></i>
+        <span class="icon-label">Wishlist</span>
+      </div>
+    </a>
+
+    <!-- Cart Icon -->
+    <a routerLink="/cart" class="icon-link" title="Cart">
+      <div class="icon-wrapper">
+        <i class="bi bi-cart"></i>
+        <span class="icon-label">Cart</span>
+      </div>
+    </a>
+
+    <!-- Profile Icon with Dropdown -->
+    <div class="profile-container">
+      <button class="profile-btn" (click)="toggleDropdown()" title="Profile">
+        <div class="icon-wrapper">
+          <i class="bi bi-person"></i>
+          <span class="icon-label">
+            {{ isAuthenticated ? (currentUser?.firstName || 'Profile') : 'Login' }}
+          </span>
+        </div>
+      </button>
+
+      <!-- Dropdown Menu -->
+      <div class="dropdown-menu" *ngIf="showDropdown" (clickOutside)="closeDropdown()">
+        <div *ngIf="isAuthenticated; else authOptions">
+          <!-- User Info -->
+          <div class="user-info">
+            <div class="user-avatar">
+              {{ currentUser?.firstName?.charAt(0) || 'U' }}
+            </div>
+            <div class="user-details">
+              <strong>{{ currentUser?.firstName }} {{ currentUser?.lastName }}</strong>
+              <small>{{ currentUser?.email }}</small>
+            </div>
+          </div>
+          
+          <div class="dropdown-divider"></div>
+          
+          <!-- Menu Items -->
+          <a [routerLink]="['/profile']" class="dropdown-item" (click)="closeDropdown()">
+            <i class="bi bi-person-circle"></i> My Profile
+          </a>
+          <a [routerLink]="['/orders']" class="dropdown-item" (click)="closeDropdown()">
+            <i class="bi bi-bag"></i> My Orders
+          </a>
+          <a [routerLink]="['/wishlist']" class="dropdown-item" (click)="closeDropdown()">
+            <i class="bi bi-heart"></i> My Wishlist
+          </a>
+          <div class="dropdown-divider"></div>
+          <a (click)="logout()" class="dropdown-item logout">
+            <i class="bi bi-box-arrow-right"></i> Logout
+          </a>
+        </div>
+        
+        <ng-template #authOptions>
+          <div class="auth-options">
+            <a routerLink="/login" class="dropdown-item" (click)="closeDropdown()">
+              <i class="bi bi-box-arrow-in-right"></i> Login
+            </a>
+            <a routerLink="/register" class="dropdown-item register" (click)="closeDropdown()">
+              <i class="bi bi-person-plus"></i> Create Account
+            </a>
+            <div class="dropdown-divider"></div>
+            <a routerLink="/" class="dropdown-item" (click)="closeDropdown()">
+              <i class="bi bi-shop"></i> Continue Shopping
+            </a>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</header>
