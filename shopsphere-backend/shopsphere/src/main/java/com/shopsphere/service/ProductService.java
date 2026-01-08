@@ -95,4 +95,32 @@ public class ProductService {
         
         return dto;
     }
+    
+    public List<Product> filterProductsAdvanced(
+            List<ProductCategory> categories,
+            List<Gender> genders,
+            Double minPrice,
+            Double maxPrice,
+            List<String> sizes,
+            List<String> colors,
+            String sortBy) {
+
+        List<Product> products = productRepository.findAll();
+
+        return products.stream()
+                .filter(p -> categories == null || categories.isEmpty() || categories.contains(p.getCategory()))
+                .filter(p -> genders == null || genders.isEmpty() || genders.contains(p.getGender()))
+                .filter(p -> minPrice == null || p.getPrice() >= minPrice)
+                .filter(p -> maxPrice == null || p.getPrice() <= maxPrice)
+                // size & color logic can be added if stored
+                .sorted((a, b) -> {
+                    if ("price-asc".equals(sortBy)) return Double.compare(a.getPrice(), b.getPrice());
+                    if ("price-desc".equals(sortBy)) return Double.compare(b.getPrice(), a.getPrice());
+                    if ("newest".equals(sortBy)) return b.getId().compareTo(a.getId());
+                    return 0;
+                })
+                .collect(Collectors.toList());
+    }
+
+
 }

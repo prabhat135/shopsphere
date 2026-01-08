@@ -9,7 +9,7 @@ import { Wishlist } from './pages/wishlist/wishlist';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Home, Navbar, Footer, SignupComponent, LoginComponent, Wishlist],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
