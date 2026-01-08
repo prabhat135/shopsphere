@@ -8,7 +8,7 @@ import { Terms } from './shared/components/terms/terms';
 import { Home } from './pages/home/home';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
-
+import { CartComponent } from './pages/cart/cart';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -20,5 +20,6 @@ export const routes: Routes = [
   { path: 'help', component: Help },
   { path: 'privacy', component: Privacy },
   { path: 'terms', component: Terms },
+  { path: 'cart', component: CartComponent }, 
   { path: '**', redirectTo: '' }
 ];

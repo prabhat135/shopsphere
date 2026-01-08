@@ -28,8 +28,11 @@
         <i class="bi bi-heart"></i>
       </a>
     
-      <a routerLink="/cart" title="Cart">
+      <a routerLink="/cart" title="Cart" class="cart-link">
         <i class="bi bi-cart"></i>
+        <span *ngIf="cartItemCount > 0" class="cart-badge">
+          {{ cartItemCount }}
+        </span>
       </a>
     
       <a routerLink="/profile" title="Profile">

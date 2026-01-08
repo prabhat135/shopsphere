@@ -1,0 +1,104 @@
+<div class="cart-item-card">
+    <div class="item-content">
+      <!-- Product Image -->
+      <div class="item-image">
+        <img [src]="item.product.images[0]" [alt]="item.product.name">
+        <div class="badges">
+          <span *ngIf="item.product.isNew" class="badge new">NEW</span>
+          <span *ngIf="item.product.originalPrice" class="badge discount">SALE</span>
+        </div>
+      </div>
+  
+      <!-- Product Details -->
+      <div class="item-details">
+        <div class="item-header">
+          <h3 class="product-name">{{ item.product.name }}</h3>
+          <div class="item-actions">
+            <button class="btn-icon" (click)="onMoveToWishlist()" title="Move to Wishlist">
+              <i class="far fa-heart"></i>
+            </button>
+            <button class="btn-icon btn-remove" (click)="onRemove()" title="Remove Item">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+  
+        <div class="product-info">
+          <span class="category">{{ item.product.category }}</span>
+          <span class="gender">{{ item.product.gender }}</span>
+        </div>
+  
+        <!-- Selected Variants -->
+        <div class="variants">
+          <div *ngIf="item.selectedSize" class="variant">
+            <strong>Size:</strong> {{ item.selectedSize }}
+          </div>
+          <div *ngIf="item.selectedColor" class="variant">
+            <strong>Color:</strong> {{ item.selectedColor }}
+          </div>
+        </div>
+  
+        <!-- Stock Status -->
+        <div class="stock-status" [class]="getStockClass()">
+          <i class="fas fa-circle"></i> {{ getStockStatus() }}
+          <span *ngIf="item.product.stockQuantity > 0 && item.product.stockQuantity < 10" class="stock-count">
+            (Only {{ item.product.stockQuantity }} left)
+          </span>
+        </div>
+      </div>
+  
+      <!-- Price Column -->
+      <div class="price-column">
+        <div class="pricing">
+          <div class="current-price">
+            ${{ item.price | number:'1.2-2' }}
+          </div>
+          <div *ngIf="item.product.originalPrice" class="original-price">
+            ${{ item.product.originalPrice | number:'1.2-2' }}
+          </div>
+          <div *ngIf="item.product.originalPrice" class="savings">
+            Save ${{ (item.product.originalPrice - item.price) * item.quantity | number:'1.2-2' }}
+          </div>
+        </div>
+      </div>
+  
+      <!-- Quantity Column -->
+      <div class="quantity-column">
+        <div class="quantity-control">
+          <button 
+            class="qty-btn" 
+            (click)="onQuantityChange(item.quantity - 1)"
+            [disabled]="item.quantity <= 1 || isUpdating">
+            <i class="fas fa-minus"></i>
+          </button>
+          
+          <div class="quantity-display">
+            <span class="qty-number">{{ item.quantity }}</span>
+            <span *ngIf="isUpdating" class="updating-spinner">
+              <i class="fas fa-spinner fa-spin"></i>
+            </span>
+          </div>
+          
+          <button 
+            class="qty-btn" 
+            (click)="onQuantityChange(item.quantity + 1)"
+            [disabled]="item.quantity >= 10 || isUpdating">
+            <i class="fas fa-plus"></i>
+          </button>
+        </div>
+        <button class="btn-qty-update" (click)="onQuantityChange(item.quantity + 1)" *ngIf="item.quantity < 10">
+          + Add more
+        </button>
+      </div>
+  
+      <!-- Total Column -->
+      <div class="total-column">
+        <div class="item-total">
+          ${{ calculateItemTotal() | number:'1.2-2' }}
+        </div>
+        <div class="per-item">
+          ${{ item.price | number:'1.2-2' }} each
+        </div>
+      </div>
+    </div>
+  </div>

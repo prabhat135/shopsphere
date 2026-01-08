@@ -1,15 +1,15 @@
-// src/app/components/product-detail/product-detail.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ProductService } from '../../../core/singleton services/services/product.service';
-import { Product } from '../../../shared/models/product.model';
+import { ProductService } from '../../../core/singleton-services/services/product.service.js';
+import { Product, ApiResponse } from '../../../shared/models/product.model';
 import { Navbar } from '../../../shared/components/navbar/navbar';
 import { Footer } from '../../../shared/components/footer/footer';
 
 @Component({
   selector: 'app-product-detail',
+  standalone: true,
   imports: [CommonModule, RouterModule, FormsModule, Navbar, Footer],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.css']
@@ -30,31 +30,33 @@ export class ProductDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      const id = +params['id'];
-      this.loadProduct(id);
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      const id = params.get('id');
+      if (id) {
+        this.loadProduct(+id);
+      }
     });
   }
 
   loadProduct(id: number): void {
     this.isLoading = true;
     this.productService.getProductById(id).subscribe({
-      next: (response) => {
+      next: (response: ApiResponse<Product>) => {
         if (response.success && response.data) {
           this.product = response.data;
-          if (this.product) {
-            this.loadRelatedProducts();
-            if (this.product.sizes.length > 0) {
-              this.selectedSize = this.product.sizes[0];
-            }
-            if (this.product.colors.length > 0) {
-              this.selectedColor = this.product.colors[0];
-            }
+
+          if (this.product.sizes.length > 0) {
+            this.selectedSize = this.product.sizes[0];
           }
+          if (this.product.colors.length > 0) {
+            this.selectedColor = this.product.colors[0];
+          }
+
+          this.loadRelatedProducts();
         }
         this.isLoading = false;
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error loading product:', error);
         this.isLoading = false;
       }
@@ -63,7 +65,7 @@ export class ProductDetailComponent implements OnInit {
 
   loadRelatedProducts(): void {
     if (!this.product) return;
-    
+
     const filterOptions = {
       categories: [this.product.category],
       genders: [this.product.gender],
@@ -72,14 +74,17 @@ export class ProductDetailComponent implements OnInit {
       colors: [],
       sortBy: 'popular' as const
     };
-    
+
     this.productService.filterProducts(filterOptions).subscribe({
-      next: (response) => {
-        if (response.success) {
+      next: (response: ApiResponse<Product[]>) => {
+        if (response.success && response.data) {
           this.relatedProducts = response.data
-            .filter(p => p.id !== this.product!.id)
+            .filter((p: Product) => p.id !== this.product!.id)
             .slice(0, 4);
         }
+      },
+      error: (error: any) => {
+        console.error('Error loading related products:', error);
       }
     });
   }
@@ -112,22 +117,18 @@ export class ProductDetailComponent implements OnInit {
       return;
     }
 
-    // Implement cart logic here
-    const cartItem = {
+    console.log('Added to cart:', {
       product: this.product,
       size: this.selectedSize,
       color: this.selectedColor,
       quantity: this.quantity
-    };
-    
-    console.log('Added to cart:', cartItem);
+    });
+
     alert('Product added to cart!');
   }
 
   addToWishlist(): void {
     if (!this.product) return;
-    
-    // Implement wishlist logic here
     console.log('Added to wishlist:', this.product);
     alert('Product added to wishlist!');
   }
@@ -138,7 +139,6 @@ export class ProductDetailComponent implements OnInit {
       return;
     }
 
-    // Navigate to checkout or implement buy now logic
     this.router.navigate(['/checkout'], {
       queryParams: {
         productId: this.product.id,
@@ -150,38 +150,33 @@ export class ProductDetailComponent implements OnInit {
   }
 
   getDiscountedPrice(): number {
-    if (!this.product) return 0;
-    
-    if (this.product.originalPrice) {
-      return this.product.price;
-    }
-    return this.product.price;
+    return this.product ? this.product.price : 0;
   }
 
   getDiscountPercentage(): number {
-    if (!this.product || !this.product.originalPrice) return 0;
-    
-    return Math.round(((this.product.originalPrice - this.product.price) / this.product.originalPrice) * 100);
+    if (!this.product?.originalPrice) return 0;
+    return Math.round(
+      ((this.product.originalPrice - this.product.price) / this.product.originalPrice) * 100
+    );
   }
 
-  // Helper methods for display
   getCategoryName(category: string): string {
     const names: Record<string, string> = {
-      'SUMMER': 'Summer Wear',
-      'WINTER': 'Winter Wear',
-      'FORMAL': 'Formal Wear',
-      'CASUAL': 'Casual Wear',
-      'TRADITIONAL': 'Traditional Wear'
+      SUMMER: 'Summer Wear',
+      WINTER: 'Winter Wear',
+      FORMAL: 'Formal Wear',
+      CASUAL: 'Casual Wear',
+      TRADITIONAL: 'Traditional Wear'
     };
     return names[category] || category;
   }
 
   getGenderName(gender: string): string {
     const names: Record<string, string> = {
-      'WOMEN': 'Women',
-      'MEN': 'Men',
-      'KIDS': 'Kids',
-      'UNISEX': 'Unisex'
+      WOMEN: 'Women',
+      MEN: 'Men',
+      KIDS: 'Kids',
+      UNISEX: 'Unisex'
     };
     return names[gender] || gender;
   }

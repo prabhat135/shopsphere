@@ -1,0 +1,142 @@
+<div class="cart-container">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading your cart...</p>
+    </div>
+  
+    <!-- Empty Cart State -->
+    <div *ngIf="!loading && isCartEmpty" class="empty-cart">
+      <div class="empty-cart-icon">
+        <i class="fas fa-shopping-cart"></i>
+      </div>
+      <h2>Your cart is empty</h2>
+      <p>Looks like you haven't added any items to your cart yet.</p>
+      <button class="btn btn-primary" (click)="continueShopping()">
+        Start Shopping
+      </button>
+    </div>
+  
+    <!-- Cart with Items -->
+    <div *ngIf="!loading && !isCartEmpty" class="cart-content">
+      <div class="cart-header">
+        <h1>Shopping Cart</h1>
+        <div class="cart-info">
+          <span class="item-count">{{ cart?.items?.length || 0 }} items</span>
+          <button class="btn-clear" (click)="clearCart()">
+            <i class="fas fa-trash"></i> Clear Cart
+          </button>
+        </div>
+      </div>
+  
+      <div class="cart-layout">
+        <!-- Cart Items List -->
+        <div class="cart-items-section">
+          <div class="cart-items">
+            <app-cart-item 
+              *ngFor="let item of cart?.items"
+              [item]="item"
+              [isUpdating]="updatingItems.has(item.id)"
+              (quantityChange)="updateQuantity(item, $event)"
+              (remove)="removeItem(item.id)"
+              (moveToWishlist)="onMoveToWishlist(item)">
+            </app-cart-item>
+          </div>
+  
+          <div class="cart-actions">
+            <button class="btn-continue" (click)="continueShopping()">
+              <i class="fas fa-arrow-left"></i> Continue Shopping
+            </button>
+            <button class="btn-update" (click)="loadCart()">
+              <i class="fas fa-sync-alt"></i> Update Cart
+            </button>
+          </div>
+        </div>
+  
+        <!-- Order Summary -->
+        <div class="order-summary">
+          <h3>Order Summary</h3>
+          
+          <div class="summary-row">
+            <span>Subtotal ({{ cart?.items?.length || 0 }} items)</span>
+            <span>${{ subtotal | number:'1.2-2' }}</span>
+          </div>
+          
+          <div class="summary-row">
+            <span>Shipping</span>
+            <span *ngIf="shipping === 0" class="free-shipping">FREE</span>
+            <span *ngIf="shipping > 0">${{ shipping | number:'1.2-2' }}</span>
+          </div>
+          
+          <div class="summary-row">
+            <span>Tax (8%)</span>
+            <span>${{ tax | number:'1.2-2' }}</span>
+          </div>
+  
+          <div *ngIf="calculateSavings() > 0" class="summary-row savings">
+            <span>You Save</span>
+            <span class="savings-amount">-${{ calculateSavings() | number:'1.2-2' }}</span>
+          </div>
+  
+          <div class="summary-divider"></div>
+  
+          <div class="summary-row total">
+            <span>Total</span>
+            <span class="total-amount">${{ total | number:'1.2-2' }}</span>
+          </div>
+  
+          <div class="shipping-note" *ngIf="subtotal < 50">
+            <i class="fas fa-shipping-fast"></i>
+            <span>Add ${{ (50 - subtotal) | number:'1.2-2' }} more for FREE shipping!</span>
+          </div>
+  
+          <div class="secure-checkout">
+            <i class="fas fa-lock"></i>
+            <span>Secure checkout</span>
+          </div>
+  
+          <button 
+            class="btn-checkout" 
+            (click)="proceedToCheckout()"
+            [disabled]="loading">
+            <i class="fas fa-lock"></i> Proceed to Checkout
+          </button>
+  
+          <div class="payment-methods">
+            <p>We accept:</p>
+            <div class="payment-icons">
+              <i class="fab fa-cc-visa"></i>
+              <i class="fab fa-cc-mastercard"></i>
+              <i class="fab fa-cc-amex"></i>
+              <i class="fab fa-cc-paypal"></i>
+              <i class="fab fa-cc-apple-pay"></i>
+            </div>
+          </div>
+  
+          <div class="return-policy">
+            <h4><i class="fas fa-undo"></i> Easy Returns</h4>
+            <p>30-day return policy. No questions asked.</p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Cross-sell Section -->
+      <div class="cross-sell">
+        <h3>Frequently Bought Together</h3>
+        <div class="cross-sell-items">
+          <div class="cross-sell-item">
+            <div class="cross-sell-image"></div>
+            <p>Matching Accessories</p>
+          </div>
+          <div class="cross-sell-item">
+            <div class="cross-sell-image"></div>
+            <p>Care Products</p>
+          </div>
+          <div class="cross-sell-item">
+            <div class="cross-sell-image"></div>
+            <p>Gift Wrapping</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

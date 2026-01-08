@@ -18,6 +18,8 @@ export interface Product {
   isNew: boolean;
   subCategory?: string;
   stockQuantity: number;
+  discountPrice?: number;   // For cart calculations (if different from price)
+  brand?: string;   
 }
 
 export interface FilterOptions {

@@ -2,11 +2,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Navbar } from '../../shared/components/navbar/navbar';
 import { Footer } from '../../shared/components/footer/footer';
-import { ProductService } from '../../core/singleton services/services/product.service';
+import { ProductService } from '../../core/singleton-services/services/product.service.js';
 import { ApiResponse } from '../../shared/models/product.model';
 
 interface TrendingProduct {
@@ -37,7 +36,6 @@ interface HomeProduct {
   imports: [
     CommonModule,
     RouterModule,
-    HttpClientModule,
     FormsModule,
     Navbar,
     Footer
@@ -86,7 +84,7 @@ export class Home implements OnInit, OnDestroy {
         }
         this.isLoading = false;
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error loading trending products:', error);
         this.loadMockTrendingProducts();
         this.isLoading = false;
@@ -119,7 +117,7 @@ export class Home implements OnInit, OnDestroy {
           this.loadMockProducts();
         }
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error loading featured products:', error);
         this.loadMockProducts();
       }

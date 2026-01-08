@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ProductService } from '../../../core/singleton services/services/product.service';
+import { ProductService } from '../../../core/singleton-services/services/product.service.js';
 import { Product, FilterOptions } from '../../../shared/models/product.model';
 import { Navbar } from '../../../shared/components/navbar/navbar';
 import { Footer } from '../../../shared/components/footer/footer';
@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-products',
+  standalone: true,
   imports: [CommonModule, RouterModule, FormsModule, Navbar, Footer],
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
@@ -81,7 +82,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   loadInitialProducts(): void {
     this.isLoading = true;
     this.productService.getAllProducts().subscribe({
-      next: (response) => {
+      next: (response: { success: any; data: Product[]; }) => {
         if (response.success) {
           this.products = response.data;
           this.filteredProducts = [...response.data];
@@ -89,7 +90,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
         }
         this.isLoading = false;
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error loading products:', error);
         this.isLoading = false;
       }
@@ -99,7 +100,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   loadFilterOptions(): void {
     // Load categories
     this.productService.getAllCategories().subscribe({
-      next: (response) => {
+      next: (response: { success: any; data: any[]; }) => {
         if (response.success) {
           response.data.forEach(category => {
             this.allCategories.push({ category, count: 0 });
@@ -110,7 +111,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
     // Load genders
     this.productService.getAllGenders().subscribe({
-      next: (response) => {
+      next: (response: { success: any; data: any[]; }) => {
         if (response.success) {
           response.data.forEach(gender => {
             this.allGenders.push({ gender, count: 0 });
@@ -121,7 +122,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
     // Load sizes
     this.productService.getAllSizes().subscribe({
-      next: (response) => {
+      next: (response: { success: any; data: any[]; }) => {
         if (response.success) {
           response.data.forEach(size => {
             this.allSizes.push({ size, count: 0 });
@@ -132,7 +133,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
     // Load colors
     this.productService.getAllColors().subscribe({
-      next: (response) => {
+      next: (response: { success: any; data: any[]; }) => {
         if (response.success) {
           response.data.forEach(color => {
             this.allColors.push({ color, count: 0 });
@@ -174,7 +175,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
         }
         this.isLoading = false;
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error filtering products:', error);
         this.isLoading = false;
       }

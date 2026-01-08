@@ -5,6 +5,7 @@ import com.shopsphere.util.SecurityUtils;
 import com.shopsphere.service.CartService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.ArrayList; 
 
 @RestController
 @RequestMapping("/api/cart")
@@ -15,7 +16,15 @@ public class CartController {
     public CartController(CartService cartService) {
         this.cartService = cartService;
     }
-    
+    @GetMapping("/public")
+    public ResponseEntity<CartDTO> getPublicCart() {
+        // Create a mock cart for testing
+        CartDTO cartDTO = new CartDTO();
+        cartDTO.setId(999L);
+        cartDTO.setTotalPrice(0.0);
+        cartDTO.setItems(new ArrayList<>());
+        return ResponseEntity.ok(cartDTO);
+    }
     @GetMapping
     public ResponseEntity<CartDTO> getCart() {
         Long userId = SecurityUtils.getCurrentUserId();
