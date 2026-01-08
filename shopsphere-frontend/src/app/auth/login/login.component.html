@@ -1,27 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="login.component.css">
-</head>
-<body>
-    <div class="auth-container">
-        <div class="auth-card">
-          <h2>Login</h2>
-      
-          <input type="email" placeholder="Email" />
-          <input type="password" placeholder="Password" />
-      
-          <button>Login</button>
-      
-          <div class="auth-footer">
-            Don’t have an account? <a routerLink="/signup">Sign up</a>
-          </div>
+<div class="auth-container">
+  <div class="auth-card">
+    <h2>Login to ShopSphere</h2>
+    
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <!-- Email Field -->
+      <div class="form-group">
+        <input 
+          type="email" 
+          formControlName="email"
+          placeholder="Email"
+          class="form-control"
+          [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" />
+        
+        <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error-message">
+          <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</span>
+          <span *ngIf="loginForm.get('email')?.errors?.['email']">Enter a valid email</span>
         </div>
       </div>
-      
 
-</body>
-</html>
+      <!-- Password Field -->
+      <div class="form-group">
+        <input 
+          type="password" 
+          formControlName="password"
+          placeholder="Password"
+          class="form-control"
+          [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" />
+        
+        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error-message">
+          <span *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</span>
+          <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Minimum 6 characters required</span>
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="alert alert-error">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        class="btn btn-primary"
+        [disabled]="loginForm.invalid || isLoading">
+        <span *ngIf="!isLoading">Login</span>
+        <span *ngIf="isLoading">Logging in...</span>
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Don't have an account? <a routerLink="/register" class="auth-link">Sign up</a></p>
+      <p>or <a routerLink="/" class="auth-link">Continue as guest</a></p>
+    </div>
+  </div>
+</div>

@@ -21,11 +21,11 @@ export class ProductService {
   }
 
   getTrendingProducts(): Observable<ApiResponse<Product[]>> {
-    return this.http.get<ApiResponse<Product[]>>(`${this.baseUrl}/trending`);
+    return this.http.get<ApiResponse<Product[]>>(`${this.baseUrl}/featured`);
   }
 
   getNewArrivals(): Observable<ApiResponse<Product[]>> {
-    return this.http.get<ApiResponse<Product[]>>(`${this.baseUrl}/new-arrivals`);
+    return this.http.get<ApiResponse<Product[]>>(`${this.baseUrl}/new`);
   }
 
   filterProducts(filterOptions: FilterOptions): Observable<ApiResponse<Product[]>> {
