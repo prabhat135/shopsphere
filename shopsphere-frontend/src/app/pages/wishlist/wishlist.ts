@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { WishlistService, WishlistResponse, ApiResponse} from '../../core/singleton services/services/wishlist.service';
+import { WishlistService, WishlistResponse, ApiResponse} from '../../core/singleton-services/services/wishlist.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-wishlist',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './wishlist.html',
   styleUrl: './wishlist.css',
 })

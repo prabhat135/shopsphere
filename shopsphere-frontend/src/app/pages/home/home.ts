@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../core/singleton-services/services/product.service';
 import { WishlistService } from '../../core/singleton-services/services/wishlist.service';
 import { ApiResponse } from '../../shared/models/product.model';
+import { Navbar } from '../../shared/components/navbar/navbar';
+import { Footer } from '../../shared/components/footer/footer';
 
 interface TrendingProduct {
   productId: number;
@@ -34,7 +36,9 @@ interface HomeProduct {
   imports: [
     CommonModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+    Navbar,
+    Footer
   ],
   templateUrl: './home.html',
   styleUrls: ['./home.css']
@@ -45,6 +49,7 @@ export class Home implements OnInit, OnDestroy {
   products: HomeProduct[] = [];
   isLoading = false;
   carouselInterval: any;
+  wishlistStatus: { [key: number]: boolean } = {};
 
   constructor(
     private productService: ProductService,

@@ -9,7 +9,7 @@ import { RouterModule } from '@angular/router';
   imports: [
     CommonModule,
     RouterModule,
-    RouterOutlet
+    RouterOutlet,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
