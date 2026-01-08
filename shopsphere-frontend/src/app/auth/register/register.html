@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - ShopSphere</title>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            
+            <!-- Success Message (Hidden by default) -->
+            <div *ngIf="successMessage" class="success-container">
+                <div class="success-icon">✓</div>
+                <h2>Account Created Successfully!</h2>
+                <p class="success-text">{{ successMessage }}</p>
+                <div class="success-actions">
+                    <a routerLink="/" class="btn-home">
+                        <i class="bi bi-house"></i> Go to Home
+                    </a>
+                    <a routerLink="/login" class="btn-login">
+                        <i class="bi bi-box-arrow-in-right"></i> Login Now
+                    </a>
+                </div>
+            </div>
+
+            <!-- Registration Form (Hidden on success) -->
+            <div *ngIf="!successMessage">
+                <h2>Create Your Account</h2>
+                <p class="subtitle">Join ShopSphere for the best shopping experience</p>
+                
+                <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                    <!-- Full Name Field -->
+                    <div class="form-group">
+                        <input 
+                            type="text" 
+                            formControlName="fullName"
+                            placeholder="Full Name"
+                            class="form-control"
+                            [class.error]="registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched" />
+                        
+                        <div *ngIf="registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched" class="error-message">
+                            <span *ngIf="registerForm.get('fullName')?.errors?.['required']">Full name is required</span>
+                        </div>
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="form-group">
+                        <input 
+                            type="email" 
+                            formControlName="email"
+                            placeholder="Email Address"
+                            class="form-control"
+                            [class.error]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" />
+                        
+                        <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="error-message">
+                            <span *ngIf="registerForm.get('email')?.errors?.['required']">Email is required</span>
+                            <span *ngIf="registerForm.get('email')?.errors?.['email']">Enter a valid email address</span>
+                        </div>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <input 
+                            type="password" 
+                            formControlName="password"
+                            placeholder="Password (min. 6 characters)"
+                            class="form-control"
+                            [class.error]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" />
+                        
+                        <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="error-message">
+                            <span *ngIf="registerForm.get('password')?.errors?.['required']">Password is required</span>
+                            <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Minimum 6 characters required</span>
+                        </div>
+                    </div>
+
+                    <!-- Confirm Password Field -->
+                    <div class="form-group">
+                        <input 
+                            type="password" 
+                            formControlName="confirmPassword"
+                            placeholder="Confirm Password"
+                            class="form-control"
+                            [class.error]="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched" />
+                        
+                        <div *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched" class="error-message">
+                            <span *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">Please confirm your password</span>
+                        </div>
+                        <div *ngIf="registerForm.errors?.['mismatch'] && registerForm.get('confirmPassword')?.touched" class="error-message">
+                            Passwords do not match
+                        </div>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div *ngIf="errorMessage" class="alert-error">
+                        <i class="bi bi-exclamation-circle"></i> {{ errorMessage }}
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button 
+                        type="submit" 
+                        class="btn-create-account"
+                        [disabled]="registerForm.invalid || isLoading">
+                        <span *ngIf="!isLoading">Create Account</span>
+                        <span *ngIf="isLoading" class="loading">
+                            <span class="spinner"></span> Creating Account...
+                        </span>
+                    </button>
+
+                    <!-- Terms and Conditions -->
+                    <div class="terms">
+                        <p>By creating an account, you agree to our <a href="terms" class="terms-link">Terms of Service</a> and <a href="privacy" class="terms-link">Privacy Policy</a></p>
+                    </div>
+                </form>
+
+
+                <!-- Footer Links -->
+                <div class="auth-footer">
+                    <p>Already have an account? <a routerLink="/login" class="auth-link">Login here</a></p>
+                    <p class="guest-link">or <a routerLink="/" class="auth-link">Continue as guest</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -7,18 +7,19 @@ import { Privacy } from './shared/components/privacy/privacy';
 import { Terms } from './shared/components/terms/terms';
 import { Home } from './pages/home/home';
 import { LoginComponent } from './auth/login/login.component';
-import { SignupComponent } from './auth/signup/signup.component';
+import { RegisterComponent } from './auth/register/register';
 import { Wishlist } from './pages/wishlist/wishlist';
+import { AuthGuard } from './auth/auth.guard';
 
 
 export const routes: Routes = [
   { path: '', component: Home },
   { path: 'login', component: LoginComponent },
-  { path: 'signup', component: SignupComponent },
+  { path: 'register', component: RegisterComponent },
   { path: 'products', component: ProductsComponent },
   { path: 'product/:id', component: ProductDetailComponent },
   { path: 'profile', component: Profile },
-  { path: 'wishlist', component: Wishlist},
+  { path: 'wishlist', component: Wishlist, canActivate: [AuthGuard]},
   { path: 'help', component: Help },
   { path: 'privacy', component: Privacy },
   { path: 'terms', component: Terms },
