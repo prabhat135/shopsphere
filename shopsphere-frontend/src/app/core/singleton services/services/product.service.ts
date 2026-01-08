@@ -8,7 +8,7 @@ import { Product,FilterOptions,ApiResponse } from '../../../shared/models/produc
   providedIn: 'root'
 })
 export class ProductService {
-  private baseUrl = 'http://localhost:8222/api/products';
+  private baseUrl = 'http://localhost:8082/api/products';
 
   constructor(private http: HttpClient) {}
 
