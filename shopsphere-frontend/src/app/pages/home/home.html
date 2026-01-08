@@ -187,9 +187,14 @@
         
         <!-- Quick Actions -->
         <div class="product-actions">
-          <button class="action-btn wishlist" (click)="$event.stopPropagation()">
-            <i class="bi bi-heart"></i>
-          </button>
+          <button class="action-btn wishlist" 
+        [class.active]="wishlistStatus[p.id]"
+        (click)="onWishlistClick(p, $event)">
+  <i class="bi" 
+     [class.bi-heart]="!wishlistStatus[p.id]"
+     [class.bi-heart-fill]="wishlistStatus[p.id]">
+  </i>
+</button>
           <button class="action-btn quick-view" (click)="$event.stopPropagation()">
             <i class="bi bi-eye"></i>
           </button>

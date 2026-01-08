@@ -1,4 +1,3 @@
-// home.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -7,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { Navbar } from '../../shared/components/navbar/navbar';
 import { Footer } from '../../shared/components/footer/footer';
 import { ProductService } from '../../core/singleton services/services/product.service';
+import { WishlistService } from '../../core/singleton services/services/wishlist.service';
 import { ApiResponse } from '../../shared/models/product.model';
 
 interface TrendingProduct {
@@ -51,8 +51,12 @@ export class Home implements OnInit, OnDestroy {
   products: HomeProduct[] = [];
   isLoading = false;
   carouselInterval: any;
+  wishlistStatus: { [productId: number]: boolean } = {};
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private wishlistService: WishlistService
+  ) {}
 
   ngOnInit(): void {
     this.loadTrendingProducts();
@@ -75,13 +79,12 @@ export class Home implements OnInit, OnDestroy {
         if (response.success && response.data) {
           this.trendingProducts = response.data.map(product => ({
             productId: product.id,
-            imageUrl: product.images?.[0] || 'assets/default-product.jpg',
+            imageUrl: product.images?.[0] || 'default-product.jpg',
             name: product.name,
             price: product.price,
             category: product.category
           }));
         } else {
-          // Fallback to mock data if API fails
           this.loadMockTrendingProducts();
         }
         this.isLoading = false;
@@ -107,23 +110,77 @@ export class Home implements OnInit, OnDestroy {
             price: product.price,
             originalPrice: product.originalPrice,
             discount: product.discount,
-            image: product.images?.[0] || 'assets/default-product.jpg',
+            image: product.images?.[0] || 'default-product.jpg',
             category: this.getCategoryDisplayName(product.category),
             rating: product.rating,
             reviewCount: product.reviewCount,
             sizes: product.sizes,
             isNew: product.isNew
           }));
+          this.checkWishlistStatus();
         } else {
-          // Fallback to mock data if API fails
           this.loadMockProducts();
+          this.checkWishlistStatus();
         }
       },
       error: (error) => {
         console.error('Error loading featured products:', error);
         this.loadMockProducts();
+        this.checkWishlistStatus();
       }
     });
+  }
+
+  /**
+   * Check wishlist status for products
+   */
+  checkWishlistStatus(): void {
+    this.products.forEach(product => {
+      this.wishlistService.checkProductInWishlist(product.id).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.wishlistStatus[product.id] = response.data.inWishlist;
+          }
+        },
+        error: (error) => {
+          console.error('Error checking wishlist status:', error);
+        }
+      });
+    });
+  }
+
+  /**
+   * Handle wishlist button click
+   */
+  onWishlistClick(product: HomeProduct, event: Event): void {
+    event.stopPropagation();
+    event.preventDefault();
+    
+    const productId = product.id;
+    
+    if (this.wishlistStatus[productId]) {
+      this.wishlistService.removeFromWishlist(productId).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.wishlistStatus[productId] = false;
+          }
+        },
+        error: (error) => {
+          console.error('Error removing from wishlist:', error);
+        }
+      });
+    } else {
+      this.wishlistService.addToWishlist(productId).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.wishlistStatus[productId] = true;
+          }
+        },
+        error: (error) => {
+          console.error('Error adding to wishlist:', error);
+        }
+      });
+    }
   }
 
   /**
@@ -133,61 +190,61 @@ export class Home implements OnInit, OnDestroy {
     this.trendingProducts = [
       { 
         productId: 1, 
-        imageUrl: 'assets/homePage_img/trend1.jpg', 
+        imageUrl: 'homePage_img/trend1.jpg', 
         name: 'Floral Summer Dress',
         price: 1499
       },
       { 
         productId: 2, 
-        imageUrl: 'assets/homePage_img/trend2.jpg', 
+        imageUrl: 'homePage_img/trend2.jpg', 
         name: 'Wool Winter Coat',
         price: 2999
       },
       { 
         productId: 3, 
-        imageUrl: 'assets/homePage_img/trend3.jpg', 
+        imageUrl: 'homePage_img/trend3.jpg', 
         name: 'Formal Business Suit',
         price: 4999
       },
       { 
         productId: 4, 
-        imageUrl: 'assets/homePage_img/trend4.jpg', 
+        imageUrl: 'homePage_img/trend4.jpg', 
         name: 'Casual Denim Jacket',
         price: 1999
       },
       { 
         productId: 5, 
-        imageUrl: 'assets/homePage_img/trend5.jpg', 
+        imageUrl: 'homePage_img/trend5.jpg', 
         name: 'Traditional Silk Saree',
         price: 3999
       },
       { 
         productId: 6, 
-        imageUrl: 'assets/homePage_img/trend6.jpg', 
+        imageUrl: 'homePage_img/trend6.jpg', 
         name: 'Kids Winter Jacket',
         price: 1299
       },
       { 
         productId: 7, 
-        imageUrl: 'assets/homePage_img/trend7.jpg', 
+        imageUrl: 'homePage_img/trend7.jpg', 
         name: 'Summer T-Shirt',
         price: 799
       },
       { 
         productId: 8, 
-        imageUrl: 'assets/homePage_img/trend8.jpg', 
+        imageUrl: 'homePage_img/trend8.jpg', 
         name: 'Formal Leather Shoes',
         price: 2499
       },
       { 
         productId: 9, 
-        imageUrl: 'assets/homePage_img/trend9.jpg', 
+        imageUrl: 'homePage_img/trend9.jpg', 
         name: 'Evening Gown',
         price: 3499
       },
       { 
         productId: 10, 
-        imageUrl: 'assets/homePage_img/trend10.jpg', 
+        imageUrl: 'homePage_img/trend10.jpg', 
         name: 'Sports Jacket',
         price: 1799
       }
@@ -205,7 +262,7 @@ export class Home implements OnInit, OnDestroy {
         price: 1499,
         originalPrice: 1999,
         discount: 25,
-        image: 'assets/homePage_img/trend1.jpg',
+        image: 'homePage_img/trend1.jpg',
         category: 'Summer Wear',
         rating: 4.5,
         reviewCount: 128,
@@ -218,7 +275,7 @@ export class Home implements OnInit, OnDestroy {
         price: 2999,
         originalPrice: 3999,
         discount: 25,
-        image: 'assets/homePage_img/trend2.jpg',
+        image: 'homePage_img/trend2.jpg',
         category: 'Winter Wear',
         rating: 4.7,
         reviewCount: 89,
@@ -229,7 +286,7 @@ export class Home implements OnInit, OnDestroy {
         id: 3,
         name: 'Formal Business Suit',
         price: 4999,
-        image: 'assets/homePage_img/trend3.jpg',
+        image: 'homePage_img/trend3.jpg',
         category: 'Formal Wear',
         rating: 4.3,
         reviewCount: 156,
@@ -242,7 +299,7 @@ export class Home implements OnInit, OnDestroy {
         price: 1999,
         originalPrice: 2499,
         discount: 20,
-        image: 'assets/homePage_img/trend4.jpg',
+        image: 'homePage_img/trend4.jpg',
         category: 'Casual Wear',
         rating: 4.6,
         reviewCount: 234,
@@ -255,7 +312,7 @@ export class Home implements OnInit, OnDestroy {
         price: 3999,
         originalPrice: 4999,
         discount: 20,
-        image: 'assets/homePage_img/trend5.jpg',
+        image: 'homePage_img/trend5.jpg',
         category: 'Traditional Wear',
         rating: 4.8,
         reviewCount: 178,
@@ -268,7 +325,7 @@ export class Home implements OnInit, OnDestroy {
         price: 1299,
         originalPrice: 1699,
         discount: 24,
-        image: 'assets/homePage_img/trend6.jpg',
+        image: 'homePage_img/trend6.jpg',
         category: 'Winter Wear',
         rating: 4.4,
         reviewCount: 67,
@@ -281,7 +338,7 @@ export class Home implements OnInit, OnDestroy {
         price: 799,
         originalPrice: 999,
         discount: 20,
-        image: 'assets/homePage_img/trend7.jpg',
+        image: 'homePage_img/trend7.jpg',
         category: 'Summer Wear',
         rating: 4.2,
         reviewCount: 189,
@@ -294,7 +351,7 @@ export class Home implements OnInit, OnDestroy {
         price: 2499,
         originalPrice: 2999,
         discount: 17,
-        image: 'assets/homePage_img/trend8.jpg',
+        image: 'homePage_img/trend8.jpg',
         category: 'Formal Wear',
         rating: 4.5,
         reviewCount: 123,
@@ -310,7 +367,7 @@ export class Home implements OnInit, OnDestroy {
   startCarouselAutoSlide(): void {
     this.carouselInterval = setInterval(() => {
       this.nextSlide();
-    }, 5000); // Change slide every 5 seconds
+    }, 5000);
   }
 
   /**
@@ -348,7 +405,6 @@ export class Home implements OnInit, OnDestroy {
   goToSlide(index: number): void {
     if (index >= 0 && index < this.trendingProducts.length) {
       this.currentSlide = index;
-      // Reset auto-slide timer when user manually selects a slide
       this.stopCarouselAutoSlide();
       this.startCarouselAutoSlide();
     }
@@ -370,48 +426,11 @@ export class Home implements OnInit, OnDestroy {
   }
 
   /**
-   * Get display name for gender
-   */
-  getGenderDisplayName(gender: string): string {
-    const genderMap: { [key: string]: string } = {
-      'WOMEN': 'Women',
-      'MEN': 'Men',
-      'KIDS': 'Kids',
-      'UNISEX': 'Unisex'
-    };
-    
-    return genderMap[gender] || gender;
-  }
-
-  /**
-   * Calculate discount percentage
-   */
-  calculateDiscountPercentage(originalPrice: number, currentPrice: number): number {
-    if (!originalPrice || originalPrice <= currentPrice) return 0;
-    return Math.round(((originalPrice - currentPrice) / originalPrice) * 100);
-  }
-
-  /**
-   * Handle wishlist button click
-   */
-  onWishlistClick(product: HomeProduct, event: Event): void {
-    event.stopPropagation();
-    event.preventDefault();
-    console.log('Added to wishlist:', product);
-    // TODO: Implement wishlist service
-    // this.wishlistService.addToWishlist(product.id);
-    alert(`${product.name} added to wishlist!`);
-  }
-
-  /**
    * Handle quick view button click
    */
   onQuickViewClick(product: HomeProduct, event: Event): void {
     event.stopPropagation();
     event.preventDefault();
-    console.log('Quick view:', product);
-    // TODO: Implement quick view modal
-    // this.modalService.openQuickView(product);
   }
 
   /**
@@ -419,14 +438,8 @@ export class Home implements OnInit, OnDestroy {
    */
   onNewsletterSubmit(email: string): void {
     if (!this.isValidEmail(email)) {
-      alert('Please enter a valid email address');
       return;
     }
-    
-    console.log('Newsletter subscription:', email);
-    // TODO: Implement newsletter subscription service
-    // this.newsletterService.subscribe(email).subscribe(...);
-    alert('Thank you for subscribing to our newsletter!');
   }
 
   /**
@@ -435,63 +448,5 @@ export class Home implements OnInit, OnDestroy {
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
-  }
-
-  /**
-   * Get product rating stars
-   */
-  getRatingStars(rating: number = 0): number[] {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push(i <= rating ? 1 : 0);
-    }
-    return stars;
-  }
-
-  /**
-   * Format price with Indian Rupee symbol
-   */
-  formatPrice(price: number): string {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(price);
-  }
-
-  /**
-   * Handle carousel mouse enter
-   */
-  onCarouselMouseEnter(): void {
-    this.stopCarouselAutoSlide();
-  }
-
-  /**
-   * Handle carousel mouse leave
-   */
-  onCarouselMouseLeave(): void {
-    this.startCarouselAutoSlide();
-  }
-
-  /**
-   * Get limited sizes for display
-   */
-  getLimitedSizes(sizes: string[] = [], limit: number = 3): string[] {
-    return sizes.slice(0, limit);
-  }
-
-  /**
-   * Check if there are more sizes than the limit
-   */
-  hasMoreSizes(sizes: string[] = [], limit: number = 3): boolean {
-    return sizes.length > limit;
-  }
-
-  /**
-   * Get remaining sizes count
-   */
-  getRemainingSizesCount(sizes: string[] = [], limit: number = 3): number {
-    return Math.max(0, sizes.length - limit);
   }
 }

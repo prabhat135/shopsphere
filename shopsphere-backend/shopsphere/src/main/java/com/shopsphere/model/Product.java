@@ -76,6 +76,12 @@ public class Product {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+ // Add this field to existing Product.java (NO OTHER CHANGES):
+    @ManyToMany(mappedBy = "wishlist", fetch = FetchType.LAZY)
+    private Set<User> usersWithWishlist = new HashSet<>();
+
+    public Set<User> getUsersWithWishlist() { return usersWithWishlist; }
+    public void setUsersWithWishlist(Set<User> usersWithWishlist) { this.usersWithWishlist = usersWithWishlist; }
     
     // Getters and Setters
     public Long getId() { return id; }

@@ -362,6 +362,14 @@
 }
 
 /* Featured Products */
+.action-btn.wishlist.active {
+  background: #667eea;
+  color: white;
+}
+
+.action-btn.wishlist.active i {
+  color: white;
+}
 .featured-products {
   padding: 4rem 2rem;
   background: white;

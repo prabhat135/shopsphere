@@ -39,11 +39,12 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Cart cart;
     
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "user_wishlist",
         joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "product_id")
+        inverseJoinColumns = @JoinColumn(name = "product_id"),
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "product_id"})
     )
     private Set<Product> wishlist = new HashSet<>();
     

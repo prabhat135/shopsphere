@@ -1,0 +1,115 @@
+<div class="wishlist-page">
+    <!-- Header -->
+    <div class="wishlist-header">
+      <h1>My Wishlist</h1>
+      <div class="wishlist-stats" *ngIf="wishlist">
+        <span>{{ wishlist?.itemCount || 0 }} items</span>
+        <button *ngIf="wishlist.itemCount > 0" (click)="clearWishlist()" class="clear-btn">
+          Clear All
+        </button>
+      </div>
+    </div>
+  
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading">
+      <div class="spinner"></div>
+      <p>Loading your wishlist...</p>
+    </div>
+  
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="error">
+      <i class="bi bi-exclamation-triangle"></i>
+      <p>{{ error }}</p>
+      <button (click)="loadWishlist()" class="retry-btn">Retry</button>
+    </div>
+  
+    <!-- Empty Wishlist -->
+    <div *ngIf="!isLoading && !error && (!wishlist || wishlist.itemCount === 0)" class="empty-wishlist">
+      <i class="bi bi-heart"></i>
+      <h2>No products added to wishlist</h2>
+      <p>Save items you love to buy them later</p>
+      <button (click)="continueShopping()" class="shop-btn">
+        Continue Shopping
+      </button>
+    </div>
+  
+    <!-- Wishlist Products -->
+    <div *ngIf="!isLoading && !error && wishlist && wishlist.itemCount > 0" class="wishlist-container">
+      <div class="wishlist-grid">
+        <div *ngFor="let item of wishlist.products" class="wishlist-item">
+          <!-- Product Image -->
+          <div class="product-image" (click)="viewProduct(item.product.id)">
+            <img [src]="item.product.images[0] || 'assets/default-product.jpg'" 
+                 [alt]="item.product.name"
+                 (error)="handleImageError($event)" />
+            
+            <!-- Remove Button -->
+            <button class="remove-btn" (click)="removeFromWishlist(item.product.id); $event.stopPropagation()">
+              <i class="bi bi-x"></i>
+            </button>
+            
+            <!-- New Badge -->
+            <div *ngIf="item.product.isNew" class="new-badge">
+              NEW
+            </div>
+          </div>
+  
+          <!-- Product Info -->
+          <div class="product-info">
+            <div class="product-category">
+              <span class="category">{{ item.product.category }}</span>
+              <span class="gender">{{ item.product.gender }}</span>
+            </div>
+            
+            <h3 class="product-name" (click)="viewProduct(item.product.id)">
+              {{ item.product.name }}
+            </h3>
+            
+            <p class="product-description">{{ item.product.description }}</p>
+            
+            <!-- Rating -->
+            <div class="product-rating">
+              <div class="stars">
+                <i *ngFor="let star of [1,2,3,4,5]" 
+                   class="bi" 
+                   [class.bi-star-fill]="star <= item.product.rating"
+                   [class.bi-star]="star > item.product.rating">
+                </i>
+              </div>
+              <span class="rating-count">({{ item.product.reviewCount }})</span>
+            </div>
+            
+            <!-- Price -->
+            <div class="product-price">
+              <span class="current-price">₹{{ item.product.price }}</span>
+              <span *ngIf="item.product.originalPrice" class="original-price">
+                ₹{{ item.product.originalPrice }}
+              </span>
+              <span *ngIf="item.product.discount" class="discount">
+                {{ item.product.discount }}% OFF
+              </span>
+            </div>
+            
+            <!-- Stock Status -->
+            <div class="stock-status" [class.in-stock]="item.product.stockQuantity > 0"
+                                   [class.out-of-stock]="item.product.stockQuantity === 0">
+              {{ item.product.stockQuantity > 0 ? 'In Stock' : 'Out of Stock' }}
+            </div>
+            
+            <!-- Actions -->
+            <div class="product-actions">
+              <button (click)="addToCart(item)" 
+                      [disabled]="item.product.stockQuantity === 0"
+                      class="add-to-cart-btn">
+                <i class="bi bi-cart-plus"></i>
+                Add to Cart
+              </button>
+              <button (click)="removeFromWishlist(item.product.id)" class="remove-wishlist-btn">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
